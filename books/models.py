@@ -1,0 +1,307 @@
+from django.db import models
+# from users.models import User
+
+
+# Create Model Library
+class Library(models.Model):
+
+    name = models.CharField(
+        max_length=300,
+        verbose_name="Library name",
+    )
+
+    main_page = models.TextField(
+        help_text="Main page text", verbose_name="Main page text"
+    )
+    rules_page = models.TextField(
+        help_text="Rules page text", verbose_name="Rules page text"
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Library"
+        verbose_name_plural = "Libraries"
+
+
+# Create Model Author
+class Author(models.Model):
+    name = models.CharField(
+        max_length=300,
+        verbose_name="Author name",
+    )
+    surname = models.CharField(
+        max_length=300,
+        verbose_name="Author surname",
+    )
+    birth_date = models.DateTimeField(
+        auto_now=False, null=False, blank=False, verbose_name="Author's birthday"
+    )
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"
+
+    class Meta:
+        verbose_name = "Author"
+        verbose_name_plural = "Authors"
+
+
+# Create Model BookGenre
+class BookGenre(models.Model):
+    ADVENTURE = "Adventure"
+    KIDS = "Kids"
+    CLASSIC = "Classic"
+    FOREIGN_LANGUAGE = "Foreign_language"
+    FANTASY = "Fantasy"
+    SCIENCE = "Science"
+    MIX = "Mix"
+
+    STATUS_CHOICES = [
+        (ADVENTURE, "Adventure"),
+        (KIDS, "Kids"),
+        (CLASSIC, "Classic"),
+        (FOREIGN_LANGUAGE, "Foreign_language"),
+        (FANTASY, "Fantasy"),
+        (SCIENCE, "Science"),
+        (MIX, "Mix"),
+    ]
+
+    genre = models.CharField(
+        max_length=16,
+        choices=STATUS_CHOICES,
+        default=None,
+        verbose_name="Book genre",
+    )
+
+    def __str__(self):
+        return self.genre
+
+    class Meta:
+        verbose_name = "Genre"
+        verbose_name_plural = "Genres"
+
+
+# Create Model BookGenre
+class BookFeature(models.Model):
+    RARE = "Rare"
+    EXPENSIVE = "Expensive"
+    POPULAR = "Popular"
+    NO_FEATURES = "No_features"
+
+    STATUS_CHOICES = [
+        (RARE, "Rare"),
+        (EXPENSIVE, "Expensive"),
+        (POPULAR, "Popular"),
+        (NO_FEATURES, "No_features"),
+    ]
+
+    feature = models.CharField(
+        max_length=11,
+        choices=STATUS_CHOICES,
+        default=NO_FEATURES,
+        verbose_name="Book feature",
+    )
+
+    def __str__(self):
+        return self.feature
+
+    class Meta:
+        verbose_name = "Feature"
+        verbose_name_plural = "Features"
+
+
+# Create Model BookContent
+class BookContent(models.Model):
+
+    number = models.PositiveSmallIntegerField(
+        null=True, blank=True, verbose_name="Content number"
+    )
+    content = models.CharField(
+        max_length=100,
+        verbose_name="Content text",
+    )
+
+    def __str__(self):
+        return self.content
+
+    class Meta:
+        verbose_name = "Content"
+        verbose_name_plural = "Contents"
+
+
+# Create Model BookVolume
+class BookVolume(models.Model):
+    number = models.PositiveSmallIntegerField(
+        null=True, blank=True, verbose_name="Volume number"
+    )
+    volume = models.PositiveSmallIntegerField(
+        verbose_name="Volume number",
+    )
+
+    def __str__(self):
+        return self.volume
+
+    class Meta:
+        verbose_name = "Volume"
+        verbose_name_plural = "Volumes"
+
+
+# Create Model BookFinance
+class BookFinance(models.Model):
+    price = models.FloatField(
+        default=10000, null=False, blank=False, verbose_name="Book price"
+    )
+    overdue_day = models.PositiveSmallIntegerField(
+        default=0, null=False, blank=False, verbose_name="Overdue day for the book"
+    )
+    overdue_date = models.DateTimeField(
+        auto_now=False, null=True, blank=True, verbose_name="Start date of overdue"
+    )
+    penalty_sum = models.FloatField(
+        default=0, null=False, blank=False, verbose_name="Penalty for overdue"
+    )
+    end_overdue = models.DateTimeField(
+        auto_now=False, null=True, blank=True, verbose_name="End date of overdue"
+    )
+    is_payment_done = models.BooleanField(default=None)
+
+    def __str__(self):
+        return self.price
+
+    class Meta:
+        verbose_name = "Finance"
+        verbose_name_plural = "Finances"
+
+
+# Create Model BookGeneral
+class BookGeneral(models.Model):
+    library = models.ForeignKey(
+        Library,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="library",
+    )
+
+    title = models.CharField(
+        max_length=300,
+        verbose_name="Book Title",
+    )
+
+    author = models.ForeignKey(
+        Author,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="author",
+    )
+
+    description = models.TextField(
+        help_text="Book description", verbose_name="Book description"
+    )
+
+    age_restriction = models.PositiveSmallIntegerField(
+        default=0, null=False, blank=False, verbose_name="Age restriction"
+    )
+
+    rating = models.PositiveIntegerField(
+        default=0, null=False, blank=False, verbose_name="Book rating"
+    )
+
+    is_available = models.BooleanField(default=True)
+
+    genre = models.ForeignKey(
+        BookGenre,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="book_genre",
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
+
+
+# Create Model BookDetail
+class BookDetail(models.Model):
+
+    book = models.ForeignKey(
+        BookGeneral,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="book_general",
+    )
+    #
+    # client = models.CharField(
+    #     User,
+    #     on_delete=models.DO_NOTHING,
+    #     null=True,
+    #     blank=True,
+    #     related_name="client",
+    # )
+
+    edition_year = models.DateTimeField(
+        auto_now=False, null=False, blank=False, verbose_name="Edition date"
+    )
+
+    page_amount = models.PositiveSmallIntegerField(
+        verbose_name="Amount of pages", null=False, blank=False
+    )
+
+    taken_by_client = models.DateTimeField(
+        auto_now=False, null=True, blank=True, verbose_name="Date, when Taken by client"
+    )
+
+    return_date = models.DateTimeField(
+        auto_now=False,
+        null=True,
+        blank=True,
+        verbose_name="Date, when shall be return by client",
+    )
+
+    is_overdue = models.BooleanField(default=False)
+
+    picture = models.ImageField(
+        upload_to="books/pictures/%Y/%m/%d/",
+        default=None,
+        null=True,
+        blank=True,
+        verbose_name="Saved boo picture",
+    )
+
+    content = models.ForeignKey(
+        BookContent,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="book_content",
+    )
+
+    volume = models.ForeignKey(
+        BookContent,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="book_volume",
+    )
+
+    book_finance = models.ForeignKey(
+        BookFinance,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="book_finance",
+    )
+
+    def __str__(self):
+        return self.book
+
+    class Meta:
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
