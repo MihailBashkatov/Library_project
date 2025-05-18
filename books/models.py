@@ -82,7 +82,7 @@ class BookGenre(models.Model):
         verbose_name_plural = "Genres"
 
 
-# Create Model BookGenre
+# Create Model BookFeature
 class BookFeature(models.Model):
     RARE = "Rare"
     EXPENSIVE = "Expensive"
@@ -126,11 +126,6 @@ class BookContent(models.Model):
     class Meta:
         verbose_name = "Content"
         verbose_name_plural = "Contents"
-
-
-
-
-
 
 
 # Create Model BookGeneral
@@ -179,6 +174,7 @@ class BookGeneral(models.Model):
     )
 
     is_book_popular = models.BooleanField(default=False)
+
     def __str__(self):
         return self.title
 
@@ -243,7 +239,6 @@ class BookDetail(models.Model):
         related_name="book_content",
     )
 
-
     feature = models.ForeignKey(
         BookFeature,
         on_delete=models.DO_NOTHING,
@@ -251,15 +246,6 @@ class BookDetail(models.Model):
         blank=True,
         related_name="book_feature",
     )
-
-
-    # book_finance = models.OneToOneField(
-    #     BookFinance,
-    #     on_delete=models.CASCADE,
-    #     null=True,
-    #     blank=True,
-    #     related_name="book_finance",
-    # )
 
     def __str__(self):
         return self.book
@@ -269,10 +255,36 @@ class BookDetail(models.Model):
         verbose_name_plural = "Books"
 
 
+# Create Model BookVolume
+class BookVolume(models.Model):
+    number = models.PositiveSmallIntegerField(
+        null=True, blank=True, verbose_name="Volume number"
+    )
+
+    page_amount = models.PositiveSmallIntegerField(
+        verbose_name="Amount of pages", null=True, blank=True
+    )
+
+    book = models.ForeignKey(
+        BookDetail,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="book_volume",
+    )
+
+    def __str__(self):
+        return self.number
+
+    class Meta:
+        verbose_name = "Volume"
+        verbose_name_plural = "Volumes"
+
+
 # Create Model BookFinance
 class BookFinance(models.Model):
 
-    book= models.OneToOneField(
+    book = models.OneToOneField(
         BookDetail,
         on_delete=models.CASCADE,
         null=True,
@@ -281,7 +293,7 @@ class BookFinance(models.Model):
     )
 
     price = models.FloatField(
-        default=10000, null=False, blank=False, verbose_name="Book price"
+        default=10000, null=True, blank=True, verbose_name="Book price"
     )
     overdue_day = models.PositiveSmallIntegerField(
         default=0, null=False, blank=False, verbose_name="Overdue day for the book"
@@ -295,7 +307,7 @@ class BookFinance(models.Model):
     end_overdue = models.DateTimeField(
         auto_now=False, null=True, blank=True, verbose_name="End date of overdue"
     )
-    is_payment_done = models.BooleanField(default=None)
+    is_payment_done = models.BooleanField(default=None, null=True, blank=True)
 
     def __str__(self):
         return self.price
@@ -303,29 +315,3 @@ class BookFinance(models.Model):
     class Meta:
         verbose_name = "Finance"
         verbose_name_plural = "Finances"
-
-
-#Create Model BookVolume
-class BookVolume(models.Model):
-        number = models.PositiveSmallIntegerField(
-            null=True, blank=True, verbose_name="Volume number"
-        )
-
-        page_amount = models.PositiveSmallIntegerField(
-            verbose_name="Amount of pages", null=True, blank=True
-        )
-
-        book = models.ForeignKey(
-            BookDetail,
-            on_delete=models.CASCADE,
-            null=True,
-            blank=True,
-            related_name="book_volume",
-        )
-
-        def __str__(self):
-            return self.number
-
-        class Meta:
-            verbose_name = "Volume"
-            verbose_name_plural = "Volumes"
