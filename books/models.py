@@ -35,7 +35,7 @@ class Author(models.Model):
         max_length=300,
         verbose_name="Author surname",
     )
-    birth_date = models.DateTimeField(
+    birth_date = models.DateField(
         auto_now=False, null=False, blank=False, verbose_name="Author's birthday"
     )
 
@@ -86,13 +86,11 @@ class BookGenre(models.Model):
 class BookFeature(models.Model):
     RARE = "Rare"
     EXPENSIVE = "Expensive"
-    POPULAR = "Popular"
     NO_FEATURES = "No_features"
 
     STATUS_CHOICES = [
         (RARE, "Rare"),
         (EXPENSIVE, "Expensive"),
-        (POPULAR, "Popular"),
         (NO_FEATURES, "No_features"),
     ]
 
@@ -130,48 +128,9 @@ class BookContent(models.Model):
         verbose_name_plural = "Contents"
 
 
-# Create Model BookVolume
-class BookVolume(models.Model):
-    number = models.PositiveSmallIntegerField(
-        null=True, blank=True, verbose_name="Volume number"
-    )
-    volume = models.PositiveSmallIntegerField(
-        verbose_name="Volume number",
-    )
-
-    def __str__(self):
-        return self.volume
-
-    class Meta:
-        verbose_name = "Volume"
-        verbose_name_plural = "Volumes"
 
 
-# Create Model BookFinance
-class BookFinance(models.Model):
-    price = models.FloatField(
-        default=10000, null=False, blank=False, verbose_name="Book price"
-    )
-    overdue_day = models.PositiveSmallIntegerField(
-        default=0, null=False, blank=False, verbose_name="Overdue day for the book"
-    )
-    overdue_date = models.DateTimeField(
-        auto_now=False, null=True, blank=True, verbose_name="Start date of overdue"
-    )
-    penalty_sum = models.FloatField(
-        default=0, null=False, blank=False, verbose_name="Penalty for overdue"
-    )
-    end_overdue = models.DateTimeField(
-        auto_now=False, null=True, blank=True, verbose_name="End date of overdue"
-    )
-    is_payment_done = models.BooleanField(default=None)
 
-    def __str__(self):
-        return self.price
-
-    class Meta:
-        verbose_name = "Finance"
-        verbose_name_plural = "Finances"
 
 
 # Create Model BookGeneral
@@ -219,6 +178,7 @@ class BookGeneral(models.Model):
         related_name="book_genre",
     )
 
+    is_book_popular = models.BooleanField(default=False)
     def __str__(self):
         return self.title
 
@@ -246,12 +206,12 @@ class BookDetail(models.Model):
         related_name="client",
     )
 
-    edition_year = models.DateTimeField(
+    edition_year = models.DateField(
         auto_now=False, null=False, blank=False, verbose_name="Edition date"
     )
 
     page_amount = models.PositiveSmallIntegerField(
-        verbose_name="Amount of pages", null=False, blank=False
+        verbose_name="Amount of pages", null=True, blank=True
     )
 
     taken_by_client = models.DateTimeField(
@@ -283,21 +243,23 @@ class BookDetail(models.Model):
         related_name="book_content",
     )
 
-    volume = models.ForeignKey(
-        BookContent,
+
+    feature = models.ForeignKey(
+        BookFeature,
         on_delete=models.DO_NOTHING,
         null=True,
         blank=True,
-        related_name="book_volume",
+        related_name="book_feature",
     )
 
-    book_finance = models.ForeignKey(
-        BookFinance,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name="book_finance",
-    )
+
+    # book_finance = models.OneToOneField(
+    #     BookFinance,
+    #     on_delete=models.CASCADE,
+    #     null=True,
+    #     blank=True,
+    #     related_name="book_finance",
+    # )
 
     def __str__(self):
         return self.book
@@ -305,3 +267,65 @@ class BookDetail(models.Model):
     class Meta:
         verbose_name = "Book"
         verbose_name_plural = "Books"
+
+
+# Create Model BookFinance
+class BookFinance(models.Model):
+
+    book= models.OneToOneField(
+        BookDetail,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="book_finance",
+    )
+
+    price = models.FloatField(
+        default=10000, null=False, blank=False, verbose_name="Book price"
+    )
+    overdue_day = models.PositiveSmallIntegerField(
+        default=0, null=False, blank=False, verbose_name="Overdue day for the book"
+    )
+    overdue_date = models.DateTimeField(
+        auto_now=False, null=True, blank=True, verbose_name="Start date of overdue"
+    )
+    penalty_sum = models.FloatField(
+        default=0, null=False, blank=False, verbose_name="Penalty for overdue"
+    )
+    end_overdue = models.DateTimeField(
+        auto_now=False, null=True, blank=True, verbose_name="End date of overdue"
+    )
+    is_payment_done = models.BooleanField(default=None)
+
+    def __str__(self):
+        return self.price
+
+    class Meta:
+        verbose_name = "Finance"
+        verbose_name_plural = "Finances"
+
+
+#Create Model BookVolume
+class BookVolume(models.Model):
+        number = models.PositiveSmallIntegerField(
+            null=True, blank=True, verbose_name="Volume number"
+        )
+
+        page_amount = models.PositiveSmallIntegerField(
+            verbose_name="Amount of pages", null=True, blank=True
+        )
+
+        book = models.ForeignKey(
+            BookDetail,
+            on_delete=models.CASCADE,
+            null=True,
+            blank=True,
+            related_name="book_volume",
+        )
+
+        def __str__(self):
+            return self.number
+
+        class Meta:
+            verbose_name = "Volume"
+            verbose_name_plural = "Volumes"

@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     "django_celery_beat", #adding app django_celery_beat
     "rest_framework", #adding app djangorestframework
     "users", # adding app users
-    "habits", # adding app habits
+    "books", # adding app books
     "rest_framework_simplejwt", # adding simplejwt
 ]
 
@@ -177,7 +177,7 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 CELERY_BEAT_SCHEDULE = {
     "send_reminder_and_set_next_date": {
-        "task": "habits.tasks.send_reminder_and_set_next_date",
+        "task": "books.tasks.send_reminder_and_set_next_date",
         "schedule": timedelta(hours=1),
     },
 }
@@ -192,3 +192,14 @@ CACHES = {
         'LOCATION': 'redis://redis:6379/1'
     }
 }
+
+# Configuration for email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS',False) == 'True'
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL',False) == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
