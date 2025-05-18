@@ -1,5 +1,5 @@
 from django.db import models
-# from users.models import User
+from users.models import User
 
 
 # Create Model Library
@@ -237,14 +237,14 @@ class BookDetail(models.Model):
         blank=True,
         related_name="book_general",
     )
-    #
-    # client = models.CharField(
-    #     User,
-    #     on_delete=models.DO_NOTHING,
-    #     null=True,
-    #     blank=True,
-    #     related_name="client",
-    # )
+
+    client = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="client",
+    )
 
     edition_year = models.DateTimeField(
         auto_now=False, null=False, blank=False, verbose_name="Edition date"
