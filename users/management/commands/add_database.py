@@ -1,6 +1,7 @@
 from django.core.management import BaseCommand
 
-from books.models import Library, Author, BookGenre, BookGeneral, BookDetail, BookFeature, BookVolume
+from books.models import (Author, BookDetail, BookFeature, BookFinance,
+                          BookGeneral, BookGenre, BookVolume, Library)
 from users.models import User
 from users.utils import create_user
 
@@ -18,6 +19,7 @@ class Command(BaseCommand):
         BookDetail.objects.all().delete()
         BookGenre.objects.all().delete()
         BookFeature.objects.all().delete()
+        BookVolume.objects.all().delete()
         BookVolume.objects.all().delete()
 
         create_user()  # Creating users in database
@@ -91,7 +93,6 @@ class Command(BaseCommand):
             {"feature": BookFeature.RARE},
             {"feature": BookFeature.EXPENSIVE},
             {"feature": BookFeature.NO_FEATURES},
-
         ]
 
         for feature_data in features:
@@ -111,9 +112,9 @@ class Command(BaseCommand):
                 "title": "Игрушки (сборник)",
                 "author": Author.objects.get(surname="Барто"),
                 "description": "В книжке собраны все стихотворения А. Барто из цикла «Игрушки». «Гармошки» - это серия "
-                               "книжек-гармошек на плотном картоне, в которую вошли популярные сказки, песенки, "
-                               "потешки и колыбельные для малышей. Яркие, забавные иллюстрации. Качественный картон "
-                               "с глянцевой пленкой. Книжку удобно использовать в игре",
+                "книжек-гармошек на плотном картоне, в которую вошли популярные сказки, песенки, "
+                "потешки и колыбельные для малышей. Яркие, забавные иллюстрации. Качественный картон "
+                "с глянцевой пленкой. Книжку удобно использовать в игре",
                 "genre": BookGenre.objects.get(genre="Kids"),
             },
             {
@@ -121,8 +122,8 @@ class Command(BaseCommand):
                 "title": '"Сказки" (Сборник сказок)',
                 "author": Author.objects.get(surname="Чуковский"),
                 "description": 'Детская книга Корней Чуковский "Сказки" с 9 аудиосказками - это интересные стихи для '
-                               'детей про животных, птиц, насекомых, путешествия, на которых выросло ни одно поколение '
-                               'детей.',
+                "детей про животных, птиц, насекомых, путешествия, на которых выросло ни одно поколение "
+                "детей.",
                 "genre": BookGenre.objects.get(genre="Kids"),
             },
             {
@@ -130,11 +131,11 @@ class Command(BaseCommand):
                 "title": "Harry Potter and the Philosopher's Stone",
                 "author": Author.objects.get(surname="Роулинг"),
                 "description": "Harry Potter has never even heard of Hogwarts when the letters start dropping on the"
-                               " doormat at number four, Privet Drive. Addressed in green ink on yellowish parchment "
-                               "with a purple seal, they are swiftly confiscated by his grisly aunt and uncle. Then, "
-                               "on Harry’s eleventh birthday, a great beetle-eyed giant of a man called Rubeus Hagrid "
-                               "bursts in with some astonishing news: Harry Potter is a wizard, and he has a place at "
-                               "Hogwarts School of Witchcraft and Wizardry. An incredible adventure is about to begin!",
+                " doormat at number four, Privet Drive. Addressed in green ink on yellowish parchment "
+                "with a purple seal, they are swiftly confiscated by his grisly aunt and uncle. Then, "
+                "on Harry’s eleventh birthday, a great beetle-eyed giant of a man called Rubeus Hagrid "
+                "bursts in with some astonishing news: Harry Potter is a wizard, and he has a place at "
+                "Hogwarts School of Witchcraft and Wizardry. An incredible adventure is about to begin!",
                 "age_restriction": 5,
                 "genre": BookGenre.objects.get(genre="Foreign_language"),
             },
@@ -143,8 +144,8 @@ class Command(BaseCommand):
                 "title": "A clockwork orange",
                 "author": Author.objects.get(surname="Бёрджесс"),
                 "description": " is a dystopian satirical black comedy novel by English writer Anthony Burgess, "
-                               "published on March 17, 1962. It is set in a near-future society that has a youth "
-                               "subculture of extreme violence.",
+                "published on March 17, 1962. It is set in a near-future society that has a youth "
+                "subculture of extreme violence.",
                 "age_restriction": 13,
                 "genre": BookGenre.objects.get(genre="Foreign_language"),
             },
@@ -153,9 +154,9 @@ class Command(BaseCommand):
                 "title": "Хищные вещи века",
                 "author": Author.objects.get(surname="Стругацкий"),
                 "description": 'В этот том вошел роман "Хищные вещи века" — одно из ранних произведений братьев '
-                               'Стругацких, увлекательный фантастический детектив, герой которого проводит '
-                               'расследование в маленькой, задыхающейся от провинциальной тупости и буржуазной '
-                               'сырости стране, откуда по миру распространяется новый, смертельно опасный наркотик…',
+                "Стругацких, увлекательный фантастический детектив, герой которого проводит "
+                "расследование в маленькой, задыхающейся от провинциальной тупости и буржуазной "
+                "сырости стране, откуда по миру распространяется новый, смертельно опасный наркотик…",
                 "age_restriction": 12,
                 "genre": BookGenre.objects.get(genre="Fantasy"),
             },
@@ -164,8 +165,8 @@ class Command(BaseCommand):
                 "title": "Властелин колец",
                 "author": Author.objects.get(surname="Толкин"),
                 "description": '"Властелин Колец. Хранители Кольца" - это книга, которая подарит вам незабываемые '
-                               'впечатления от захватывающей истории о приключениях хоббита Фродо и его друзей в '
-                               'мире магии и волшебства.',
+                "впечатления от захватывающей истории о приключениях хоббита Фродо и его друзей в "
+                "мире магии и волшебства.",
                 "age_restriction": 6,
                 "genre": BookGenre.objects.get(genre="Fantasy"),
             },
@@ -174,7 +175,7 @@ class Command(BaseCommand):
                 "title": "Война и мир",
                 "author": Author.objects.get(surname="Толстой"),
                 "description": "роман-эпопея Льва Николаевича Толстого, описывающий русское общество в эпоху войн "
-                               "против Наполеона в 1805—1812 годах. Эпилог романа доводит повествование до 1820 года.",
+                "против Наполеона в 1805—1812 годах. Эпилог романа доводит повествование до 1820 года.",
                 "age_restriction": 8,
                 "genre": BookGenre.objects.get(genre="Classic"),
             },
@@ -182,11 +183,11 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "Преступление и наказание",
                 "author": Author.objects.get(surname="Достоевский"),
-                "description": 'Самое известное произведение классика русской литературы Федора Михайловича '
-                               'Достоевского. Роман проходят во всех российских школах и вузах, а заграницей он '
-                               'считается одним из символов русской культуры. "Преступление и наказание" поднимает '
-                               'важнейшие нравственно-мировоззренческие вопросы - о вере, совести, грехе и об '
-                               'искуплении через страдание.',
+                "description": "Самое известное произведение классика русской литературы Федора Михайловича "
+                "Достоевского. Роман проходят во всех российских школах и вузах, а заграницей он "
+                'считается одним из символов русской культуры. "Преступление и наказание" поднимает '
+                "важнейшие нравственно-мировоззренческие вопросы - о вере, совести, грехе и об "
+                "искуплении через страдание.",
                 "age_restriction": 12,
                 "genre": BookGenre.objects.get(genre="Classic"),
             },
@@ -195,8 +196,8 @@ class Command(BaseCommand):
                 "title": "Робинзон Крузо",
                 "author": Author.objects.get(surname="Дефо"),
                 "description": "История человека, сумевшего выжить на необитаемом острове. История его борьбы с "
-                               "безжалостными силами природы и блистательной победы. История его дружбы с благородным "
-                               "дикарем и опасной схватки с пиратами... ",
+                "безжалостными силами природы и блистательной победы. История его дружбы с благородным "
+                "дикарем и опасной схватки с пиратами... ",
                 "age_restriction": 5,
                 "genre": BookGenre.objects.get(genre="Adventure"),
             },
@@ -220,8 +221,8 @@ class Command(BaseCommand):
                 "book": BookGeneral.objects.get(title="Игрушки (сборник)"),
                 "edition_year": "1950-01-10",
                 "page_amount": 75,
-                "feature": BookFeature.objects.get(feature='Rare'),
-                "client": user_3
+                "feature": BookFeature.objects.get(feature="Rare"),
+                "client": user_3,
             },
             {
                 "book": BookGeneral.objects.get(title='"Сказки" (Сборник сказок)'),
@@ -241,37 +242,39 @@ class Command(BaseCommand):
                 "book": BookGeneral.objects.get(title="A clockwork orange"),
                 "edition_year": "1983-08-25",
                 "page_amount": 375,
-                "feature": BookFeature.objects.get(feature='Expensive'),
-                "client": user_6
+                "feature": BookFeature.objects.get(feature="Expensive"),
+                "client": user_6,
             },
             {
                 "book": BookGeneral.objects.get(title="Хищные вещи века"),
                 "edition_year": "1995-11-15",
                 "page_amount": 250,
-                "client": user_3
+                "client": user_3,
             },
             {
                 "book": BookGeneral.objects.get(title="Властелин колец"),
                 "edition_year": "2000-01-25",
-                "page_amount": 756, "feature": BookFeature.objects.get(feature='Expensive'),
-                "client": user_4
+                "page_amount": 756,
+                "feature": BookFeature.objects.get(feature="Expensive"),
+                "client": user_4,
             },
             {
                 "book": BookGeneral.objects.get(title="Война и мир"),
-                "edition_year": "1928-12-08", "feature": BookFeature.objects.get(feature='Rare'),
-                "client": user_5
+                "edition_year": "1928-12-08",
+                "feature": BookFeature.objects.get(feature="Rare"),
+                "client": user_5,
             },
             {
                 "book": BookGeneral.objects.get(title="Преступление и наказание"),
                 "edition_year": "1953-09-17",
                 "page_amount": 675,
-                "feature": BookFeature.objects.get(feature='Rare')
+                "feature": BookFeature.objects.get(feature="Rare"),
             },
             {
                 "book": BookGeneral.objects.get(title="Робинзон Крузо"),
                 "edition_year": "1850-03-30",
                 "page_amount": 965,
-                "feature": BookFeature.objects.get(feature='Rare')
+                "feature": BookFeature.objects.get(feature="Rare"),
             },
         ]
 
@@ -290,7 +293,7 @@ class Command(BaseCommand):
             {
                 "number": 1,
                 "page_amount": 567,
-                "book": BookDetail.objects.get(edition_year='1928-12-08')
+                "book": BookDetail.objects.get(edition_year="1928-12-08"),
             },
         ]
 
@@ -303,6 +306,90 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(f"Successfully added {len(books_volume)} volumes\n")
+        )
+
+        books_finances = [
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(title="Игрушки (сборник)"),
+                    edition_year="1950-01-10",
+                ),
+                "price": 15000,
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(title='"Сказки" (Сборник сказок)'),
+                    edition_year="1964-03-23",
+                ),
+                "price": 20000,
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(
+                        title="Harry Potter and the Philosopher's " "Stone"
+                    ),
+                    edition_year="2010-06-10",
+                ),
+                "price": 30000,
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(title="A clockwork orange"),
+                    edition_year="1983-08-25",
+                ),
+                "price": 22000,
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(title="Хищные вещи века"),
+                    edition_year="1995-11-15",
+                ),
+                "price": 15000,
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(title="Властелин колец"),
+                    edition_year="2000-01-25",
+                ),
+                "price": 8000,
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(title="Война и мир"),
+                    edition_year="1928-12-08",
+                ),
+                "price": 150000,
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(title="Преступление и наказание"),
+                    edition_year="1953-09-17",
+                ),
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book=BookGeneral.objects.get(title="Робинзон Крузо"),
+                    edition_year="1850-03-30",
+                ),
+                "price": 400000,
+            },
+        ]
+
+        for book_finance_data in books_finances:
+            book_finance, created = BookFinance.objects.get_or_create(
+                **book_finance_data
+            )
+            if not created:
+                self.stdout.write(
+                    self.style.WARNING(
+                        f"Finance data {book_finance.price}  already exists\n"
+                    )
+                )
+
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Successfully added {len(books_finances)} finance data\n"
+            )
         )
 
         self.stdout.write(
