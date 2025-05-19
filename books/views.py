@@ -1,7 +1,13 @@
 # from django.http import HttpResponseForbidden
-# from rest_framework import generics, status
+from rest_framework import generics, status
+
+from books.models import BookGeneral, BookDetail
+from books.permissions import IsLibrarian
+from books.serializers import BookGeneralSerializer, BookDetailSerializer, BookGenreSerializer
+
+
 # from rest_framework.generics import get_object_or_404
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 # from rest_framework.response import Response
 # from rest_framework.views import APIView
 #
@@ -22,11 +28,11 @@
 #         serializer.save(habit_user=self.request.user)
 #
 #
-# class HabitsListAPIView(generics.ListAPIView):
-#     """View to create a list of public books"""
-#
-#     serializer_class = HabitSerializer
-#     queryset = Habit.objects.filter(habit_is_public=True)
+class BooksListAPIView(generics.ListAPIView):
+    """View to create a list of public books"""
+
+    serializer_class = BookDetailSerializer
+    queryset = BookDetail.objects.all()
 #
 #     # access for all users
 #     permission_classes = [
@@ -62,29 +68,29 @@
 #         return self.get_paginated_response(serializer.data)
 #
 #
-# class HabitRetreiveAPIView(generics.RetrieveAPIView):
-#     """View to get a particular habit for the user"""
-#
-#     serializer_class = HabitSerializer
-#     queryset = Habit.objects.all()
+class BookRetrieveAPIView(generics.RetrieveAPIView):
+    """View to get a particular habit for the user"""
+
+    serializer_class = BookDetailSerializer
+    queryset = BookDetail.objects.all()
 #     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
 #
 #
 # #
 # #
-# class HabitUpdateAPIView(generics.UpdateAPIView):
-#     """View to update a particular habit for the user"""
+class BookUpdateAPIView(generics.UpdateAPIView):
+    """View to update a particular book"""
+
+    serializer_class = BookDetailSerializer
+    queryset = BookDetail.objects.all()
+    permission_classes = [IsAuthenticated, IsLibrarian]  # an access only for librarian
 #
-#     serializer_class = HabitSerializer
-#     queryset = Habit.objects.all()
-#     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
 #
-#
-# class HabitDestroyAPIView(generics.DestroyAPIView):
-#     """View to delete a particular habit for the user"""
-#
-#     queryset = Habit.objects.all()
-#     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
+class BookDestroyAPIView(generics.DestroyAPIView):
+    """View to delete a particular book"""
+
+    queryset = BookDetail.objects.all()
+    permission_classes = [IsAuthenticated, IsLibrarian]  # an access only for librarian
 #
 #
 # class PublicAPIView(APIView):
