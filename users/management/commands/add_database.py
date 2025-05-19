@@ -37,6 +37,13 @@ class Command(BaseCommand):
         user_2.is_librarian = True
         user_2.save()
 
+        user_list = [user_1, user_2, user_3, user_4, user_5, user_6]
+        user_card = 1
+        for user in user_list:
+            user.user_card = user_card
+            user_card += 1
+            user.save()
+
         library, _ = Library.objects.get_or_create(
             name="Library name",
             main_page="Pibrary main page description",
@@ -218,20 +225,20 @@ class Command(BaseCommand):
 
         books_detail = [
             {
-                "book": BookGeneral.objects.get(title="Игрушки (сборник)"),
+                "book_general": BookGeneral.objects.get(title="Игрушки (сборник)"),
                 "edition_year": "1950-01-10",
                 "page_amount": 75,
                 "feature": BookFeature.objects.get(feature="Rare"),
                 "client": user_3,
             },
             {
-                "book": BookGeneral.objects.get(title='"Сказки" (Сборник сказок)'),
+                "book_general": BookGeneral.objects.get(title='"Сказки" (Сборник сказок)'),
                 "edition_year": "1964-03-23",
                 "page_amount": 50,
                 "client": user_4,
             },
             {
-                "book": BookGeneral.objects.get(
+                "book_general": BookGeneral.objects.get(
                     title="Harry Potter and the Philosopher's Stone"
                 ),
                 "edition_year": "2010-06-10",
@@ -239,39 +246,39 @@ class Command(BaseCommand):
                 "client": user_5,
             },
             {
-                "book": BookGeneral.objects.get(title="A clockwork orange"),
+                "book_general": BookGeneral.objects.get(title="A clockwork orange"),
                 "edition_year": "1983-08-25",
                 "page_amount": 375,
                 "feature": BookFeature.objects.get(feature="Expensive"),
                 "client": user_6,
             },
             {
-                "book": BookGeneral.objects.get(title="Хищные вещи века"),
+                "book_general": BookGeneral.objects.get(title="Хищные вещи века"),
                 "edition_year": "1995-11-15",
                 "page_amount": 250,
                 "client": user_3,
             },
             {
-                "book": BookGeneral.objects.get(title="Властелин колец"),
+                "book_general": BookGeneral.objects.get(title="Властелин колец"),
                 "edition_year": "2000-01-25",
                 "page_amount": 756,
                 "feature": BookFeature.objects.get(feature="Expensive"),
                 "client": user_4,
             },
             {
-                "book": BookGeneral.objects.get(title="Война и мир"),
+                "book_general": BookGeneral.objects.get(title="Война и мир"),
                 "edition_year": "1928-12-08",
                 "feature": BookFeature.objects.get(feature="Rare"),
                 "client": user_5,
             },
             {
-                "book": BookGeneral.objects.get(title="Преступление и наказание"),
+                "book_general": BookGeneral.objects.get(title="Преступление и наказание"),
                 "edition_year": "1953-09-17",
                 "page_amount": 675,
                 "feature": BookFeature.objects.get(feature="Rare"),
             },
             {
-                "book": BookGeneral.objects.get(title="Робинзон Крузо"),
+                "book_general": BookGeneral.objects.get(title="Робинзон Крузо"),
                 "edition_year": "1850-03-30",
                 "page_amount": 965,
                 "feature": BookFeature.objects.get(feature="Rare"),
@@ -279,10 +286,10 @@ class Command(BaseCommand):
         ]
 
         for book_data in books_detail:
-            book, created = BookDetail.objects.get_or_create(**book_data)
+            books, created = BookDetail.objects.get_or_create(**book_data)
             if not created:
                 self.stdout.write(
-                    self.style.WARNING(f"Book {book.book}  already exists\n")
+                    self.style.WARNING(f"Book {book.book_general}  already exists\n")
                 )
 
         self.stdout.write(
@@ -311,21 +318,21 @@ class Command(BaseCommand):
         books_finances = [
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(title="Игрушки (сборник)"),
+                    book_general=BookGeneral.objects.get(title="Игрушки (сборник)"),
                     edition_year="1950-01-10",
                 ),
                 "price": 15000,
             },
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(title='"Сказки" (Сборник сказок)'),
+                    book_general=BookGeneral.objects.get(title='"Сказки" (Сборник сказок)'),
                     edition_year="1964-03-23",
                 ),
                 "price": 20000,
             },
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(
+                    book_general=BookGeneral.objects.get(
                         title="Harry Potter and the Philosopher's " "Stone"
                     ),
                     edition_year="2010-06-10",
@@ -334,41 +341,41 @@ class Command(BaseCommand):
             },
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(title="A clockwork orange"),
+                    book_general=BookGeneral.objects.get(title="A clockwork orange"),
                     edition_year="1983-08-25",
                 ),
                 "price": 22000,
             },
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(title="Хищные вещи века"),
+                    book_general=BookGeneral.objects.get(title="Хищные вещи века"),
                     edition_year="1995-11-15",
                 ),
                 "price": 15000,
             },
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(title="Властелин колец"),
+                    book_general=BookGeneral.objects.get(title="Властелин колец"),
                     edition_year="2000-01-25",
                 ),
                 "price": 8000,
             },
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(title="Война и мир"),
+                    book_general=BookGeneral.objects.get(title="Война и мир"),
                     edition_year="1928-12-08",
                 ),
                 "price": 150000,
             },
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(title="Преступление и наказание"),
+                    book_general=BookGeneral.objects.get(title="Преступление и наказание"),
                     edition_year="1953-09-17",
                 ),
             },
             {
                 "book": BookDetail.objects.get(
-                    book=BookGeneral.objects.get(title="Робинзон Крузо"),
+                    book_general=BookGeneral.objects.get(title="Робинзон Крузо"),
                     edition_year="1850-03-30",
                 ),
                 "price": 400000,
