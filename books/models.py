@@ -5,7 +5,7 @@ from users.models import User
 # Create Model Library
 class Library(models.Model):
 
-    name = models.CharField(
+    name = models.CharField(default='Library_1',
         max_length=300,
         verbose_name="Library name",
     )
@@ -186,12 +186,12 @@ class BookGeneral(models.Model):
 # Create Model BookDetail
 class BookDetail(models.Model):
 
-    book = models.ForeignKey(
+    book_general = models.ForeignKey(
         BookGeneral,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name="book_general",
+        related_name="book_detail",
     )
 
     client = models.ForeignKey(
@@ -211,7 +211,7 @@ class BookDetail(models.Model):
     )
 
     taken_by_client = models.DateTimeField(
-        auto_now=False, null=True, blank=True, verbose_name="Date, when Taken by client"
+        auto_now=False, null=True, blank=True, default=None, verbose_name="Date, when Taken by client"
     )
 
     return_date = models.DateTimeField(
@@ -231,12 +231,12 @@ class BookDetail(models.Model):
         verbose_name="Saved boo picture",
     )
 
-    content = models.ForeignKey(
+    content = models.OneToOneField(
         BookContent,
         on_delete=models.DO_NOTHING,
         null=True,
         blank=True,
-        related_name="book_content",
+        default=None,
     )
 
     feature = models.ForeignKey(
@@ -315,3 +315,46 @@ class BookFinance(models.Model):
     class Meta:
         verbose_name = "Finance"
         verbose_name_plural = "Finances"
+
+
+
+# class HistoryBookDetailPerClient(models.Model):
+#
+#     book = models.ForeignKey(
+#         BookDetail,
+#         on_delete=models.DO_NOTHING,
+#         null=True,
+#         blank=True,
+#         related_name="book_detail",
+#     )
+#
+#     client = models.ForeignKey(
+#         User,
+#         on_delete=models.DO_NOTHING,
+#         null=True,
+#         blank=True,
+#         related_name="client",
+#     )
+#
+#     taken_by_client = models.DateTimeField(
+#         auto_now=False, null=True, blank=True, default=None, verbose_name="Date, when Taken by client"
+#     )
+#
+#     return_date = models.DateTimeField(
+#         auto_now=False,
+#         null=True,
+#         blank=True,
+#         verbose_name="Date, when shall be return by client",
+#     )
+#
+#     is_overdue = models.BooleanField(default=False)
+#
+#     is_payment_done = models.BooleanField(default=None)
+#
+#     def __str__(self):
+#         return self.book
+#
+#     class Meta:
+#         verbose_name = "Book"
+#         verbose_name_plural = "Books"
+
