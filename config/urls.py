@@ -20,7 +20,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # path("", include("books.urls", namespace="books",)),
+    path("", include("books.urls", namespace="books",)),
     path("", include("users.urls", namespace="users")),
 
     # path("swagger<format>/", schema_view.without_ui(cache_timeout=0), name="schema-json"),
