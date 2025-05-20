@@ -242,8 +242,8 @@ class BookDetail(models.Model):
     feature = models.ForeignKey(
         BookFeature,
         on_delete=models.DO_NOTHING,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         related_name="book_feature",
     )
 
