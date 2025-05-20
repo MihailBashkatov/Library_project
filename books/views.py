@@ -1,8 +1,9 @@
 # from django.http import HttpResponseForbidden
 from rest_framework import generics, status
+from rest_framework.exceptions import ValidationError
 
 from books.models import BookGeneral, BookDetail
-from books.permissions import IsLibrarian
+from books.permissions import IsLibrarian, IsOwner, IsLibrarianAddBook
 from books.serializers import BookGeneralSerializer, BookDetailSerializer, BookGenreSerializer
 
 
@@ -17,16 +18,12 @@ from rest_framework.permissions import IsAuthenticated
 # from books.serializers import HabitSerializer
 #
 #
-# class HabitCreateAPIView(generics.CreateAPIView):
-#     """View to create a habit"""
-#
-#     serializer_class = HabitSerializer
-#     permission_classes = [IsOwner, IsAuthenticated]
-#
-#     def perform_create(self, serializer):
-#         """Adding logic to get user, who is creating a habit"""
-#         serializer.save(habit_user=self.request.user)
-#
+class BookCreateAPIView(generics.CreateAPIView):
+    """View to create a book"""
+
+    serializer_class = BookDetailSerializer
+    permission_classes = [IsAuthenticated, IsLibrarianAddBook]
+
 #
 class BooksListAPIView(generics.ListAPIView):
     """View to create a list of public books"""
@@ -48,17 +45,17 @@ class BooksListAPIView(generics.ListAPIView):
 #         return self.get_paginated_response(serializer.data)
 #
 #
-# class HabitsUserListAPIView(generics.ListAPIView):
-#     """View to create a list of books for particular user"""
+class BooksUserListAPIView(generics.ListAPIView):
+    """View to create a list of books for particular user"""
+
+    serializer_class = BookDetailSerializer
+    queryset = BookDetail.objects.all()
+    permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
+    # pagination_class = MyPagination
 #
-#     serializer_class = HabitSerializer
-#     queryset = Habit.objects.all()
-#     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
-#     pagination_class = MyPagination
+    def get_queryset(self):
 #
-#     def get_queryset(self):
-#
-#         return Habit.objects.filter(habit_user=self.request.user)
+        return BookDetail.objects.filter(client=self.request.user)
 #
 #     def get(self, request, **kwargs):
 #         """Adding logic for pagination"""
