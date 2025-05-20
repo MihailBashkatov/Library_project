@@ -1,7 +1,10 @@
+# from django.core.exceptions import ValidationError
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from books.models import Library, Author, BookGenre, BookFeature, BookContent, BookGeneral, BookDetail, \
     BookVolume, BookFinance
+from users.serializers import UserSerializer
 
 
 # class HabitSerializer(serializers.ModelSerializer):
@@ -86,6 +89,7 @@ class BookGeneralSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookGeneral
         fields = [
+            "id",
             "library",
             "title",
             "author",
@@ -105,6 +109,21 @@ class BookDetailSerializer(serializers.ModelSerializer):
     book_volume = BookVolumeSerializer(many=True, read_only=True)
     content = BookContentSerializer(read_only=True)
     book_general = BookGeneralSerializer(read_only=True)
+    client = UserSerializer(read_only=True)
+
+    def to_internal_value(self, data):
+        book_general_pk = data.get('book_general')
+
+        internal_data = super().to_internal_value(data)
+        try:
+            book_general = BookGeneral.objects.get(pk=book_general_pk)
+        except BookGeneral.DoesNotExist:
+            raise ValidationError(
+                {'book_general': ['Invalid book_general primary key']},
+                code='invalid',
+            )
+        internal_data['book_general'] = book_general
+        return internal_data
 
 
     class Meta:
@@ -123,4 +142,5 @@ class BookDetailSerializer(serializers.ModelSerializer):
             "feature",
             "book_finance",
             "book_volume",
+            # "book_general_id"
         ]
