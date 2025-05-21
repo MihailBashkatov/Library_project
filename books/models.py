@@ -5,7 +5,8 @@ from users.models import User
 # Create Model Library
 class Library(models.Model):
 
-    name = models.CharField(default='Library_1',
+    name = models.CharField(
+        unique=True,
         max_length=300,
         verbose_name="Library name",
     )
@@ -47,30 +48,49 @@ class Author(models.Model):
         verbose_name_plural = "Authors"
 
 
+# # Create Model BookGenre
+# class BookGenre(models.Model):
+#     ADVENTURE = "Adventure"
+#     KIDS = "Kids"
+#     CLASSIC = "Classic"
+#     FOREIGN_LANGUAGE = "Foreign_language"
+#     FANTASY = "Fantasy"
+#     SCIENCE = "Science"
+#     MIX = "Mix"
+#
+#     STATUS_CHOICES = [
+#         (ADVENTURE, "Adventure"),
+#         (KIDS, "Kids"),
+#         (CLASSIC, "Classic"),
+#         (FOREIGN_LANGUAGE, "Foreign_language"),
+#         (FANTASY, "Fantasy"),
+#         (SCIENCE, "Science"),
+#         (MIX, "Mix"),
+#     ]
+#
+#     genre = models.CharField(
+#         max_length=16,
+#         choices=STATUS_CHOICES,
+#         verbose_name="Book genre",
+#         null=False,
+#         blank=False
+#     )
+#
+#     def __str__(self):
+#         return self.genre
+#
+#     class Meta:
+#         verbose_name = "Genre"
+#         verbose_name_plural = "Genres"
+
+
 # Create Model BookGenre
 class BookGenre(models.Model):
-    ADVENTURE = "Adventure"
-    KIDS = "Kids"
-    CLASSIC = "Classic"
-    FOREIGN_LANGUAGE = "Foreign_language"
-    FANTASY = "Fantasy"
-    SCIENCE = "Science"
-    MIX = "Mix"
-
-    STATUS_CHOICES = [
-        (ADVENTURE, "Adventure"),
-        (KIDS, "Kids"),
-        (CLASSIC, "Classic"),
-        (FOREIGN_LANGUAGE, "Foreign_language"),
-        (FANTASY, "Fantasy"),
-        (SCIENCE, "Science"),
-        (MIX, "Mix"),
-    ]
 
     genre = models.CharField(
         max_length=16,
-        choices=STATUS_CHOICES,
-        default=None,
+        null=False,
+        blank=False,
         verbose_name="Book genre",
     )
 
@@ -133,8 +153,8 @@ class BookGeneral(models.Model):
     library = models.ForeignKey(
         Library,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         related_name="library",
     )
 
@@ -146,8 +166,8 @@ class BookGeneral(models.Model):
     author = models.ForeignKey(
         Author,
         on_delete=models.DO_NOTHING,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         related_name="author",
     )
 
@@ -156,7 +176,7 @@ class BookGeneral(models.Model):
     )
 
     age_restriction = models.PositiveSmallIntegerField(
-        default=0, null=False, blank=False, verbose_name="Age restriction"
+            null=False, blank=False, verbose_name="Age restriction"
     )
 
     rating = models.PositiveIntegerField(
@@ -165,12 +185,20 @@ class BookGeneral(models.Model):
 
     is_available = models.BooleanField(default=True)
 
+    # genre = models.ForeignKey(
+    #     BookGenre,
+    #     on_delete=models.DO_NOTHING,
+    #     null=False,
+    #     blank=False,
+    #     related_name="book_genre",
+    # )
+
     genre = models.ForeignKey(
         BookGenre,
         on_delete=models.DO_NOTHING,
         null=True,
         blank=True,
-        related_name="book_genre",
+        related_name="genre_book",
     )
 
     is_book_popular = models.BooleanField(default=False)
@@ -207,7 +235,7 @@ class BookDetail(models.Model):
     )
 
     page_amount = models.PositiveSmallIntegerField(
-        verbose_name="Amount of pages", null=True, blank=True
+        verbose_name="Amount of pages", null=False, blank=False
     )
 
     taken_by_client = models.DateTimeField(
@@ -287,13 +315,13 @@ class BookFinance(models.Model):
     book = models.OneToOneField(
         BookDetail,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         related_name="book_finance",
     )
 
     price = models.FloatField(
-        default=10000, null=True, blank=True, verbose_name="Book price"
+        null=False, blank=False, verbose_name="Book price"
     )
     overdue_day = models.PositiveSmallIntegerField(
         default=0, null=False, blank=False, verbose_name="Overdue day for the book"
