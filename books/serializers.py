@@ -84,7 +84,7 @@ class BookVolumeSerializer(serializers.ModelSerializer):
 class BookGeneralSerializer(serializers.ModelSerializer):
     """Serializer for the model BookGeneral."""
 
-    genre = BookGenreSerializer(read_only=True)
+    # genre = BookGenreSerializer(read_only=True, many=True)
 
     class Meta:
         model = BookGeneral
@@ -97,7 +97,7 @@ class BookGeneralSerializer(serializers.ModelSerializer):
             "age_restriction",
             "rating",
             "is_available",
-            "genre",
+            # "genre",
             "is_book_popular",
         ]
 
@@ -142,5 +142,4 @@ class BookDetailSerializer(serializers.ModelSerializer):
             "feature",
             "book_finance",
             "book_volume",
-            # "book_general_id"
         ]
