@@ -6,19 +6,10 @@ class User(AbstractUser):
     """Registering model User"""
 
     username = None
-    email = models.EmailField(
-        unique=True,
-        verbose_name="Email")
-    city = models.CharField(
-        max_length=50,
-        blank=True,
-        null=True,
-        verbose_name="City")
+    email = models.EmailField(unique=True, verbose_name="Email")
+    city = models.CharField(max_length=50, blank=True, null=True, verbose_name="City")
     phone_number = models.CharField(
-        max_length=30,
-        blank=True,
-        null=True,
-        verbose_name="Phone number"
+        max_length=30, blank=True, null=True, verbose_name="Phone number"
     )
     avatar = models.ImageField(
         upload_to="users/images/%Y/%m/%d/",

@@ -12,7 +12,7 @@ class IsVolumeExist:
         book_volume = value.get("book_volume")
         if len(book_volume) == 0:
             # if time_duration > 120:
-                raise ValidationError("Time duration shall not be more than 120 seconds")
+            raise ValidationError("Time duration shall not be more than 120 seconds")
 
 
 # class HabitPeriodValidator:

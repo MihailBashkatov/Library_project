@@ -36,15 +36,15 @@ def send_reminder_and_set_next_date():
                 f"\nDo not forget about nice habit {habit.related_habit}"
             )
             message = (
-              f'Hello, '
-              f'dear {habit.habit_user.first_name if habit.habit_user.first_name else "User"},'
-              f'soon time for your habit - "{habit.habit_action}"'
-              f"It starts at {formatted_habit_date}."
-              f"\nTime duration is {habit.habit_time_duration} seconds."
-              f"Place is {habit.habit_place}.\n"
-              f'\nNext time for a habit "{habit.habit_name}" '
-              f'will occur in {habit.habit_period} days: {formatted_next_habit_time} '
-              f'at {habit.habit_place}.\n'
+                f"Hello, "
+                f'dear {habit.habit_user.first_name if habit.habit_user.first_name else "User"},'
+                f'soon time for your habit - "{habit.habit_action}"'
+                f"It starts at {formatted_habit_date}."
+                f"\nTime duration is {habit.habit_time_duration} seconds."
+                f"Place is {habit.habit_place}.\n"
+                f'\nNext time for a habit "{habit.habit_name}" '
+                f"will occur in {habit.habit_period} days: {formatted_next_habit_time} "
+                f"at {habit.habit_place}.\n"
             )
 
             if habit.habit_reward:

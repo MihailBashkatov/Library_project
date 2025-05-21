@@ -1,10 +1,10 @@
 import requests
 
-from config.settings import TELEGRAM_URL, BOT_TOKEN
+from config.settings import BOT_TOKEN, TELEGRAM_URL
 
 
 def send_telegram_message(telegram_chat_id, message):
-    """ Function to send a message to user via Telegram"""
+    """Function to send a message to user via Telegram"""
 
     params = {
         "text": message,

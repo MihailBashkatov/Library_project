@@ -60,7 +60,11 @@ class Command(BaseCommand):
             {"name": "Фёдор", "surname": "Достоевский", "birth_date": "1821-10-30"},
             {"name": "Борис", "surname": "Стругацкий", "birth_date": "1933-04-15"},
             {"name": "Джон", "surname": "Толкин", "birth_date": "1892-01-03"},
-            {"name": "Антуан", "surname": "Де Сент-Экзюпери", "birth_date": "1900-06-29"},
+            {
+                "name": "Антуан",
+                "surname": "Де Сент-Экзюпери",
+                "birth_date": "1900-06-29",
+            },
         ]
 
         for author_data in authors:
@@ -90,12 +94,11 @@ class Command(BaseCommand):
             {"genre": "Adventure"},
             {"genre": "Kids"},
             {"genre": "Classic"},
-             {"genre": "Foreign_language"},
-             {"genre": "Fantasy"},
-             {"genre": "Science"},
-             {"genre": "Mix"},
+            {"genre": "Foreign_language"},
+            {"genre": "Fantasy"},
+            {"genre": "Science"},
+            {"genre": "Mix"},
         ]
-
 
         for genre_data in genres:
             genre, created = BookGenre.objects.get_or_create(**genre_data)
@@ -227,13 +230,13 @@ class Command(BaseCommand):
                 "title": "Маленький принц",
                 "author": Author.objects.get(surname="Де Сент-Экзюпери"),
                 "description": "Есть произведения, которые можно читать и перечитывать много раз. "
-                                "Книга Антуана де Сент-Экзюпери «Маленький принц» одна из таких. "
-                                "С момента первого издания в 1943 году она входит в число самых читаемых в мире. "
-                                "Ее автор, французский летчик и писатель, взрослый, так и оставшийся в душе ребенком. "
-                                "Книга «Маленький принц» рассказывает о необыкновенной встрече пилота "
-                                "(из-за неполадок в моторе летчику пришлось посадить самолет в пустыне) "
-                                "с Маленьким принцем, гостем с другой планеты. Это произведение входит в программу "
-                                "литературы 6 класса",
+                "Книга Антуана де Сент-Экзюпери «Маленький принц» одна из таких. "
+                "С момента первого издания в 1943 году она входит в число самых читаемых в мире. "
+                "Ее автор, французский летчик и писатель, взрослый, так и оставшийся в душе ребенком. "
+                "Книга «Маленький принц» рассказывает о необыкновенной встрече пилота "
+                "(из-за неполадок в моторе летчику пришлось посадить самолет в пустыне) "
+                "с Маленьким принцем, гостем с другой планеты. Это произведение входит в программу "
+                "литературы 6 класса",
                 "age_restriction": 0,
                 "genre": BookGenre.objects.get(genre="Adventure"),
             },
@@ -261,7 +264,9 @@ class Command(BaseCommand):
                 "client": user_3,
             },
             {
-                "book_general": BookGeneral.objects.get(title='"Сказки" (Сборник сказок)'),
+                "book_general": BookGeneral.objects.get(
+                    title='"Сказки" (Сборник сказок)'
+                ),
                 "edition_year": "1964-03-23",
                 "page_amount": 50,
                 "client": user_4,
@@ -305,7 +310,9 @@ class Command(BaseCommand):
                 "client": user_5,
             },
             {
-                "book_general": BookGeneral.objects.get(title="Преступление и наказание"),
+                "book_general": BookGeneral.objects.get(
+                    title="Преступление и наказание"
+                ),
                 "edition_year": "1953-09-17",
                 "page_amount": 675,
                 "feature": BookFeature.objects.get(feature="Rare"),
@@ -321,7 +328,6 @@ class Command(BaseCommand):
                 "edition_year": "1996-12-31",
                 "page_amount": 110,
                 "feature": BookFeature.objects.get(feature="Rare"),
-
             },
         ]
 
@@ -365,7 +371,9 @@ class Command(BaseCommand):
             },
             {
                 "book": BookDetail.objects.get(
-                    book_general=BookGeneral.objects.get(title='"Сказки" (Сборник сказок)'),
+                    book_general=BookGeneral.objects.get(
+                        title='"Сказки" (Сборник сказок)'
+                    ),
                     edition_year="1964-03-23",
                 ),
                 "price": 20000,
@@ -409,7 +417,9 @@ class Command(BaseCommand):
             },
             {
                 "book": BookDetail.objects.get(
-                    book_general=BookGeneral.objects.get(title="Преступление и наказание"),
+                    book_general=BookGeneral.objects.get(
+                        title="Преступление и наказание"
+                    ),
                     edition_year="1953-09-17",
                 ),
             },

@@ -11,6 +11,8 @@ class IsOwner(permissions.BasePermission):
         if obj.client == request.user:
             return True
         return False
+
+
 #
 #
 # class IsOwnerNiceHabit(permissions.BasePermission):
@@ -24,6 +26,7 @@ class IsOwner(permissions.BasePermission):
 #             return True
 #         return False
 
+
 class IsLibrarian(permissions.BasePermission):
     """
     Object-level permission to only allow librarian of an object(book) to edit it.
@@ -34,6 +37,7 @@ class IsLibrarian(permissions.BasePermission):
         if request.user.is_librarian:
             return True
         return False
+
 
 class IsLibrarianAddBook(permissions.BasePermission):
     """

@@ -1,14 +1,15 @@
 # from django.http import HttpResponseForbidden
 from rest_framework import generics, status
 from rest_framework.exceptions import ValidationError
-
-from books.models import BookGeneral, BookDetail, Author, Library, BookGenre, BookFinance
-from books.permissions import IsLibrarian, IsOwner, IsLibrarianAddBook
-from books.serializers import BookGeneralSerializer, BookDetailSerializer, BookGenreSerializer, AuthorSerializer, \
-    LibrarySerializer, BookFinanceSerializer
-
 # from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+
+from books.models import (Author, BookDetail, BookFinance, BookGeneral,
+                          BookGenre, Library)
+from books.permissions import IsLibrarian, IsLibrarianAddBook, IsOwner
+from books.serializers import (AuthorSerializer, BookDetailSerializer,
+                               BookFinanceSerializer, BookGeneralSerializer,
+                               BookGenreSerializer, LibrarySerializer)
 
 
 # from rest_framework.response import Response
@@ -26,12 +27,15 @@ class BookCreateAPIView(generics.CreateAPIView):
     serializer_class = BookDetailSerializer
     permission_classes = [IsAuthenticated, IsLibrarianAddBook]
 
+
 #
 class BooksListAPIView(generics.ListAPIView):
     """View to create a list of public books"""
 
     serializer_class = BookDetailSerializer
     queryset = BookDetail.objects.all()
+
+
 #
 #     # access for all users
 #     permission_classes = [
@@ -53,11 +57,14 @@ class BooksUserListAPIView(generics.ListAPIView):
     serializer_class = BookDetailSerializer
     queryset = BookDetail.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
+
     # pagination_class = MyPagination
-#
+    #
     def get_queryset(self):
-#
+        #
         return BookDetail.objects.filter(client=self.request.user)
+
+
 #
 #     def get(self, request, **kwargs):
 #         """Adding logic for pagination"""
@@ -73,6 +80,8 @@ class BookRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = BookDetailSerializer
     queryset = BookDetail.objects.all()
     # permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
+
+
 #
 #
 # #
@@ -82,14 +91,24 @@ class BookUpdateAPIView(generics.UpdateAPIView):
 
     serializer_class = BookDetailSerializer
     queryset = BookDetail.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for librarian
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for librarian
+
+
 #
 #
 class BookDestroyAPIView(generics.DestroyAPIView):
     """View to delete a particular book"""
 
     queryset = BookDetail.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for librarian
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for librarian
+
+
 #
 #
 # class PublicAPIView(APIView):
@@ -125,12 +144,12 @@ class BookDestroyAPIView(generics.DestroyAPIView):
 #         )
 
 
-
 class AuthorCreateAPIView(generics.CreateAPIView):
     """View to create a author"""
 
     serializer_class = AuthorSerializer
     permission_classes = [IsAuthenticated, IsLibrarianAddBook]
+
 
 #
 class AuthorsListAPIView(generics.ListAPIView):
@@ -152,14 +171,22 @@ class AuthorUpdateAPIView(generics.UpdateAPIView):
 
     serializer_class = AuthorSerializer
     queryset = Author.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for librarian
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for librarian
+
+
 #
 #
 class AuthorDestroyAPIView(generics.DestroyAPIView):
     """View to delete a particular Author"""
 
     queryset = Author.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for librarian
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for librarian
 
 
 class BookGeneralCreateAPIView(generics.CreateAPIView):
@@ -167,6 +194,7 @@ class BookGeneralCreateAPIView(generics.CreateAPIView):
 
     serializer_class = BookGeneralSerializer
     permission_classes = [IsAuthenticated, IsLibrarianAddBook]
+
 
 #
 class BookGeneralsListAPIView(generics.ListAPIView):
@@ -190,15 +218,22 @@ class BookGeneralUpdateAPIView(generics.UpdateAPIView):
 
     serializer_class = BookGeneralSerializer
     queryset = BookGeneral.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for librarian
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for librarian
+
+
 #
 #
 class BookGeneralDestroyAPIView(generics.DestroyAPIView):
     """View to delete a particular general book description"""
 
     queryset = BookGeneral.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for librarian
-
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for librarian
 
 
 class LibraryCreateAPIView(generics.CreateAPIView):
@@ -206,6 +241,7 @@ class LibraryCreateAPIView(generics.CreateAPIView):
 
     serializer_class = LibrarySerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
+
 
 #
 class LibrariesListAPIView(generics.ListAPIView):
@@ -230,14 +266,18 @@ class LibraryUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LibrarySerializer
     queryset = Library.objects.all()
     permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
+
+
 #
 #
 class LibraryDestroyAPIView(generics.DestroyAPIView):
     """View to delete a particular library"""
 
     queryset = Library.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for admin
-
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for admin
 
 
 class GenreCreateAPIView(generics.CreateAPIView):
@@ -245,6 +285,7 @@ class GenreCreateAPIView(generics.CreateAPIView):
 
     serializer_class = BookGenreSerializer
     permission_classes = [IsAuthenticated, IsLibrarianAddBook]
+
 
 #
 class GenresListAPIView(generics.ListAPIView):
@@ -268,14 +309,22 @@ class GenreUpdateAPIView(generics.UpdateAPIView):
 
     serializer_class = BookGenreSerializer
     queryset = BookGenre.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for librarian
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for librarian
+
+
 #
 #
 class GenreDestroyAPIView(generics.DestroyAPIView):
     """View to delete a particular genre"""
 
     queryset = BookGenre.objects.all()
-    permission_classes = [IsAuthenticated, IsLibrarianAddBook]  # an access only for librarian
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarianAddBook,
+    ]  # an access only for librarian
 
 
 class BookFinanceCreateAPIView(generics.CreateAPIView):
@@ -283,6 +332,7 @@ class BookFinanceCreateAPIView(generics.CreateAPIView):
 
     serializer_class = BookFinanceSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
+
 
 #
 class BookFinancesListAPIView(generics.ListAPIView):
@@ -307,6 +357,8 @@ class BookFinanceUpdateAPIView(generics.UpdateAPIView):
     serializer_class = BookFinanceSerializer
     queryset = BookFinance.objects.all()
     permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
+
+
 #
 #
 class BookFinanceDestroyAPIView(generics.DestroyAPIView):

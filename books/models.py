@@ -1,4 +1,5 @@
 from django.db import models
+
 from users.models import User
 
 
@@ -176,7 +177,7 @@ class BookGeneral(models.Model):
     )
 
     age_restriction = models.PositiveSmallIntegerField(
-            null=False, blank=False, verbose_name="Age restriction"
+        null=False, blank=False, verbose_name="Age restriction"
     )
 
     rating = models.PositiveIntegerField(
@@ -239,7 +240,11 @@ class BookDetail(models.Model):
     )
 
     taken_by_client = models.DateTimeField(
-        auto_now=False, null=True, blank=True, default=None, verbose_name="Date, when Taken by client"
+        auto_now=False,
+        null=True,
+        blank=True,
+        default=None,
+        verbose_name="Date, when Taken by client",
     )
 
     return_date = models.DateTimeField(
@@ -320,9 +325,7 @@ class BookFinance(models.Model):
         related_name="book_finance",
     )
 
-    price = models.FloatField(
-        null=False, blank=False, verbose_name="Book price"
-    )
+    price = models.FloatField(null=False, blank=False, verbose_name="Book price")
     overdue_day = models.PositiveSmallIntegerField(
         default=0, null=False, blank=False, verbose_name="Overdue day for the book"
     )
@@ -343,7 +346,6 @@ class BookFinance(models.Model):
     class Meta:
         verbose_name = "Finance"
         verbose_name_plural = "Finances"
-
 
 
 # class HistoryBookDetailPerClient(models.Model):
@@ -385,4 +387,3 @@ class BookFinance(models.Model):
 #     class Meta:
 #         verbose_name = "Book"
 #         verbose_name_plural = "Books"
-
