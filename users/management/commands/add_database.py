@@ -20,7 +20,7 @@ class Command(BaseCommand):
         BookGenre.objects.all().delete()
         BookFeature.objects.all().delete()
         BookVolume.objects.all().delete()
-        BookVolume.objects.all().delete()
+        BookFinance.objects.all().delete()
 
         create_user()  # Creating users in database
 
@@ -46,7 +46,7 @@ class Command(BaseCommand):
 
         library, _ = Library.objects.get_or_create(
             name="Library name",
-            main_page="Pibrary main page description",
+            main_page="Library main page description",
             rules_page="Library rules page description",
         )
 
@@ -60,6 +60,7 @@ class Command(BaseCommand):
             {"name": "Фёдор", "surname": "Достоевский", "birth_date": "1821-10-30"},
             {"name": "Борис", "surname": "Стругацкий", "birth_date": "1933-04-15"},
             {"name": "Джон", "surname": "Толкин", "birth_date": "1892-01-03"},
+            {"name": "Антуан", "surname": "Де Сент-Экзюпери", "birth_date": "1900-06-29"},
         ]
 
         for author_data in authors:
@@ -75,15 +76,26 @@ class Command(BaseCommand):
             self.style.SUCCESS(f"Successfully added {len(authors)} authors")
         )
 
+        # genres = [
+        #     {"genre": BookGenre.FOREIGN_LANGUAGE},
+        #     {"genre": BookGenre.FANTASY},
+        #     {"genre": BookGenre.CLASSIC},
+        #     {"genre": BookGenre.KIDS},
+        #     {"genre": BookGenre.ADVENTURE},
+        #     {"genre": BookGenre.SCIENCE},
+        #     {"genre": BookGenre.MIX},
+        # ]
+
         genres = [
-            {"genre": BookGenre.FOREIGN_LANGUAGE},
-            {"genre": BookGenre.FANTASY},
-            {"genre": BookGenre.CLASSIC},
-            {"genre": BookGenre.KIDS},
-            {"genre": BookGenre.ADVENTURE},
-            {"genre": BookGenre.SCIENCE},
-            {"genre": BookGenre.MIX},
+            {"genre": "Adventure"},
+            {"genre": "Kids"},
+            {"genre": "Classic"},
+             {"genre": "Foreign_language"},
+             {"genre": "Fantasy"},
+             {"genre": "Science"},
+             {"genre": "Mix"},
         ]
+
 
         for genre_data in genres:
             genre, created = BookGenre.objects.get_or_create(**genre_data)
@@ -122,6 +134,7 @@ class Command(BaseCommand):
                 "книжек-гармошек на плотном картоне, в которую вошли популярные сказки, песенки, "
                 "потешки и колыбельные для малышей. Яркие, забавные иллюстрации. Качественный картон "
                 "с глянцевой пленкой. Книжку удобно использовать в игре",
+                "age_restriction": 0,
                 "genre": BookGenre.objects.get(genre="Kids"),
             },
             {
@@ -131,6 +144,7 @@ class Command(BaseCommand):
                 "description": 'Детская книга Корней Чуковский "Сказки" с 9 аудиосказками - это интересные стихи для '
                 "детей про животных, птиц, насекомых, путешествия, на которых выросло ни одно поколение "
                 "детей.",
+                "age_restriction": 0,
                 "genre": BookGenre.objects.get(genre="Kids"),
             },
             {
@@ -208,6 +222,21 @@ class Command(BaseCommand):
                 "age_restriction": 5,
                 "genre": BookGenre.objects.get(genre="Adventure"),
             },
+            {
+                "library": library,
+                "title": "Маленький принц",
+                "author": Author.objects.get(surname="Де Сент-Экзюпери"),
+                "description": "Есть произведения, которые можно читать и перечитывать много раз. "
+                                "Книга Антуана де Сент-Экзюпери «Маленький принц» одна из таких. "
+                                "С момента первого издания в 1943 году она входит в число самых читаемых в мире. "
+                                "Ее автор, французский летчик и писатель, взрослый, так и оставшийся в душе ребенком. "
+                                "Книга «Маленький принц» рассказывает о необыкновенной встрече пилота "
+                                "(из-за неполадок в моторе летчику пришлось посадить самолет в пустыне) "
+                                "с Маленьким принцем, гостем с другой планеты. Это произведение входит в программу "
+                                "литературы 6 класса",
+                "age_restriction": 0,
+                "genre": BookGenre.objects.get(genre="Adventure"),
+            },
         ]
 
         for book_data in books_general:
@@ -236,6 +265,7 @@ class Command(BaseCommand):
                 "edition_year": "1964-03-23",
                 "page_amount": 50,
                 "client": user_4,
+                "feature": BookFeature.objects.get(feature="No_features"),
             },
             {
                 "book_general": BookGeneral.objects.get(
@@ -244,6 +274,7 @@ class Command(BaseCommand):
                 "edition_year": "2010-06-10",
                 "page_amount": 568,
                 "client": user_5,
+                "feature": BookFeature.objects.get(feature="No_features"),
             },
             {
                 "book_general": BookGeneral.objects.get(title="A clockwork orange"),
@@ -257,6 +288,7 @@ class Command(BaseCommand):
                 "edition_year": "1995-11-15",
                 "page_amount": 250,
                 "client": user_3,
+                "feature": BookFeature.objects.get(feature="No_features"),
             },
             {
                 "book_general": BookGeneral.objects.get(title="Властелин колец"),
@@ -269,6 +301,7 @@ class Command(BaseCommand):
                 "book_general": BookGeneral.objects.get(title="Война и мир"),
                 "edition_year": "1928-12-08",
                 "feature": BookFeature.objects.get(feature="Rare"),
+                "page_amount": 586,
                 "client": user_5,
             },
             {
@@ -282,6 +315,13 @@ class Command(BaseCommand):
                 "edition_year": "1850-03-30",
                 "page_amount": 965,
                 "feature": BookFeature.objects.get(feature="Rare"),
+            },
+            {
+                "book_general": BookGeneral.objects.get(title="Маленький принц"),
+                "edition_year": "1996-12-31",
+                "page_amount": 110,
+                "feature": BookFeature.objects.get(feature="Rare"),
+
             },
         ]
 
@@ -379,6 +419,13 @@ class Command(BaseCommand):
                     edition_year="1850-03-30",
                 ),
                 "price": 400000,
+            },
+            {
+                "book": BookDetail.objects.get(
+                    book_general=BookGeneral.objects.get(title="Маленький принц"),
+                    edition_year="1996-12-31",
+                ),
+                "price": 23000,
             },
         ]
 
