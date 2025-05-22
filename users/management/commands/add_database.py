@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 
 from books.models import (Author, BookDetail, BookFeature, BookFinance,
-                          BookGeneral, BookGenre, BookVolume, Library)
+                          BookGeneral, BookGenre, BookVolume, Library, BookContent)
 from users.models import User
 from users.utils import create_user
 
@@ -21,6 +21,7 @@ class Command(BaseCommand):
         BookFeature.objects.all().delete()
         BookVolume.objects.all().delete()
         BookFinance.objects.all().delete()
+        BookContent.objects.all().delete()
 
         create_user()  # Creating users in database
 
@@ -127,6 +128,7 @@ class Command(BaseCommand):
         self.stdout.write(
             self.style.SUCCESS(f"Successfully added {len(features)} features")
         )
+
 
         books_general = [
             {
@@ -361,6 +363,23 @@ class Command(BaseCommand):
             self.style.SUCCESS(f"Successfully added {len(books_volume)} volumes\n")
         )
 
+
+        contents = [
+            {"volume": BookVolume.objects.get(number=1), "number": " ", "content": "Том первый"},
+            {"volume": BookVolume.objects.get(number=1), "number": " ", "content": "Часть первая"},
+            {"volume": BookVolume.objects.get(number=1), "number": "I", "content": "5"},
+            {"volume": BookVolume.objects.get(number=1), "number": "II", "content": "15"},
+            {"volume": BookVolume.objects.get(number=1), "number": "III", "content": "27"},
+            {"volume": BookVolume.objects.get(number=1), "number": " ", "content": "Часть вторая"},
+        ]
+
+        for content_data in contents:
+            content, created = BookContent.objects.get_or_create(**content_data)
+            if not created:
+                self.stdout.write(
+                    self.style.WARNING(f"Content {content.content}  already exists\n")
+                )
+
         books_finances = [
             {
                 "book": BookDetail.objects.get(
@@ -422,6 +441,7 @@ class Command(BaseCommand):
                     ),
                     edition_year="1953-09-17",
                 ),
+                "price": 400000,
             },
             {
                 "book": BookDetail.objects.get(
@@ -455,6 +475,7 @@ class Command(BaseCommand):
                 f"Successfully added {len(books_finances)} finance data\n"
             )
         )
+
 
         self.stdout.write(
             self.style.SUCCESS(f"Successfully added 2 Librarians and 4 users\n")
