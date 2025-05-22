@@ -130,25 +130,6 @@ class BookFeature(models.Model):
         verbose_name_plural = "Features"
 
 
-# Create Model BookContent
-class BookContent(models.Model):
-
-    number = models.PositiveSmallIntegerField(
-        null=True, blank=True, verbose_name="Content number"
-    )
-    content = models.CharField(
-        max_length=100,
-        verbose_name="Content text",
-    )
-
-    def __str__(self):
-        return self.content
-
-    class Meta:
-        verbose_name = "Content"
-        verbose_name_plural = "Contents"
-
-
 # Create Model BookGeneral
 class BookGeneral(models.Model):
     library = models.ForeignKey(
@@ -247,7 +228,7 @@ class BookDetail(models.Model):
         verbose_name="Date, when Taken by client",
     )
 
-    return_date = models.DateTimeField(
+    due_date = models.DateTimeField(
         auto_now=False,
         null=True,
         blank=True,
@@ -264,14 +245,6 @@ class BookDetail(models.Model):
         verbose_name="Saved boo picture",
     )
 
-    content = models.OneToOneField(
-        BookContent,
-        on_delete=models.DO_NOTHING,
-        null=True,
-        blank=True,
-        default=None,
-    )
-
     feature = models.ForeignKey(
         BookFeature,
         on_delete=models.DO_NOTHING,
@@ -281,7 +254,7 @@ class BookDetail(models.Model):
     )
 
     def __str__(self):
-        return self.book
+        return self.book_general.title
 
     class Meta:
         verbose_name = "Book"
@@ -291,18 +264,18 @@ class BookDetail(models.Model):
 # Create Model BookVolume
 class BookVolume(models.Model):
     number = models.PositiveSmallIntegerField(
-        null=True, blank=True, verbose_name="Volume number"
+        null=False, blank=False, verbose_name="Volume number"
     )
 
     page_amount = models.PositiveSmallIntegerField(
-        verbose_name="Amount of pages", null=True, blank=True
+        verbose_name="Amount of pages", null=False, blank=False
     )
 
     book = models.ForeignKey(
         BookDetail,
         on_delete=models.CASCADE,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         related_name="book_volume",
     )
 
@@ -347,6 +320,36 @@ class BookFinance(models.Model):
         verbose_name = "Finance"
         verbose_name_plural = "Finances"
 
+
+# Create Model BookContent
+class BookContent(models.Model):
+    book = models.ForeignKey(BookDetail,
+                             null=True,
+                             blank=True,
+                             on_delete=models.CASCADE,
+                             related_name="book_content")
+
+    volume = models.ForeignKey(BookVolume,
+                               null=True,
+                               blank=True,
+                               on_delete=models.CASCADE,
+                               related_name="volume_content")
+
+    number = models.CharField(
+        max_length=100,
+        verbose_name=" Number text",
+    )
+    content = models.CharField(
+        max_length=100,
+        verbose_name="Content text",
+    )
+
+    def __str__(self):
+        return self.content
+
+    class Meta:
+        verbose_name = "Content"
+        verbose_name_plural = "Contents"
 
 # class HistoryBookDetailPerClient(models.Model):
 #
