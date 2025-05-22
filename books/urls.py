@@ -16,7 +16,12 @@ from books.views import (AuthorCreateAPIView, AuthorDestroyAPIView,
                          GenresListAPIView, GenreUpdateAPIView,
                          LibrariesListAPIView, LibraryCreateAPIView,
                          LibraryDestroyAPIView, LibraryRetrieveAPIView,
-                         LibraryUpdateAPIView)
+                         LibraryUpdateAPIView, BookVolumeCreateAPIView, BookVolumesListAPIView,
+                         BookVolumeRetrieveAPIView, BookVolumeUpdateAPIView, BookVolumeDestroyAPIView,
+                         BookContentCreateAPIView, BookContentsListAPIView, BookContentRetrieveAPIView,
+                         BookContentUpdateAPIView, BookContentDestroyAPIView, BookFeatureCreateAPIView,
+                         BookFeaturesListAPIView, BookFeatureRetrieveAPIView, BookFeatureUpdateAPIView,
+                         BookFeatureDestroyAPIView, BookUpdateClientAPIView)
 
 app_name = BooksConfig.name
 
@@ -84,6 +89,7 @@ urlpatterns = [
     path("genre/<int:pk>/", GenreRetrieveAPIView.as_view(), name="genre-detail"),
     path("genre/update/<int:pk>/", GenreUpdateAPIView.as_view(), name="genre-update"),
     path("genre/delete/<int:pk>/", GenreDestroyAPIView.as_view(), name="genre-delete"),
+
     # Paths for BookFinance CRUD
     path(
         "book_finance/create/",
@@ -108,5 +114,29 @@ urlpatterns = [
         BookFinanceDestroyAPIView.as_view(),
         name="book_finance-delete",
     ),
+
+# Paths for BookVolume CRUD
+    path("volume/create/", BookVolumeCreateAPIView.as_view(), name="volume-create"),
+    path("volumes/", BookVolumesListAPIView.as_view(), name="volumes-list"),
+    path("volume/<int:pk>/", BookVolumeRetrieveAPIView.as_view(), name="volume-detail"),
+    path("volume/update/<int:pk>/", BookVolumeUpdateAPIView.as_view(), name="volume-update"),
+    path("volume/delete/<int:pk>/", BookVolumeDestroyAPIView.as_view(), name="volume-delete"),
+
+# Paths for BookContent CRUD
+    path("content/create/", BookContentCreateAPIView.as_view(), name="content-create"),
+    path("contents/", BookContentsListAPIView.as_view(), name="contents-list"),
+    path("content/<int:pk>/", BookContentRetrieveAPIView.as_view(), name="content-detail"),
+    path("content/update/<int:pk>/", BookContentUpdateAPIView.as_view(), name="content-update"),
+    path("content/delete/<int:pk>/", BookContentDestroyAPIView.as_view(), name="content-delete"),
+
+# Paths for BookFeature CRUD
+    path("feature/create/", BookFeatureCreateAPIView.as_view(), name="feature-create"),
+    path("features/", BookFeaturesListAPIView.as_view(), name="features-list"),
+    path("feature/<int:pk>/", BookFeatureRetrieveAPIView.as_view(), name="feature-detail"),
+    path("feature/update/<int:pk>/", BookFeatureUpdateAPIView.as_view(), name="feature-update"),
+    path("feature/delete/<int:pk>/", BookFeatureDestroyAPIView.as_view(), name="feature-delete"),
+
+    path("book_client/update/<int:pk>/", BookUpdateClientAPIView.as_view(), name="book_client-update"),
+
     # path("habit/public/<int:pk>/", PublicAPIView.as_view(), name="public-habit"),
 ]
