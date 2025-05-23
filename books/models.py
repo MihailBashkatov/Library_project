@@ -280,7 +280,7 @@ class BookVolume(models.Model):
     )
 
     def __str__(self):
-        return self.number
+        return f'{self.number}'
 
     class Meta:
         verbose_name = "Volume"
