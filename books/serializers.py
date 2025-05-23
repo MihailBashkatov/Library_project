@@ -112,7 +112,8 @@ class BookDetailSerializer(serializers.ModelSerializer):
     book_content = BookContentSerializer(read_only=True, many=True)
     book_general = BookGeneralSerializer(read_only=True)
     client = UserSerializer(read_only=True)
-
+    taken_by_client = serializers.DateTimeField(required=True,
+                                           input_formats=["%Y-%m-%d %H:%M"])
 
     def to_internal_value(self, data):
         book_general_pk = data.get("book_general")
@@ -149,56 +150,16 @@ class BookDetailSerializer(serializers.ModelSerializer):
 class BookDetailClientSerializer(serializers.ModelSerializer):
     """Serializer for the model BookDetail. If user takes or returns a book"""
 
-    # book_finance = BookFinanceSerializer(read_only=True)
-    # book_volume = BookVolumeSerializer(many=True, read_only=True)
-    # book_content = BookContentSerializer(read_only=True, many=True)
-    # book_general = BookGeneralSerializer(read_only=True)
-    # client = UserSerializer(read_only=True)
-
-    # def to_internal_value(self, data):
-    #     book_general_pk = data.get("book_general")
-    #
-    #     internal_data = super().to_internal_value(data)
-    #     try:
-    #         book_general = BookGeneral.objects.get(pk=book_general_pk)
-    #     except BookGeneral.DoesNotExist:
-    #         raise ValidationError(
-    #             {"book_general": ["Invalid book_general primary key"]},
-    #             code="invalid",
-    #         )
-    #     internal_data["book_general"] = book_general
-    #     return internal_data
+    book_volume = BookVolumeSerializer(many=True, read_only=True)
 
     class Meta:
         model = BookDetail
-        # fields = [
-        #     "id",
-        #     "book_general__title",
-        #     "client",
-        #     "edition_year",
-        #     "page_amount",
-        #     "taken_by_client",
-        #     "due_date",
-        #     "is_overdue",
-        #     "picture",
-        #     "book_content",
-        #     "feature",
-        #     "book_finance",
-        #     "book_volume",
-        # ]
 
         fields = [
             "client",
-            "taken_by_client"
-
-
+            'book_volume'
         ]
 
         validators = [
                     IsBookTaken(field=["client"]),
-                    # RewardOrHabitRelatedValidator(field=["related_habit", "habit_reward"]),
-                    # NiceHabitRelatedValidator(field=["related_habit"]),
-                    # NiceNotRewardNotRelatedHabitValidator(field=["is_nice_habit"]),
-                    # HabitPeriodValidator(field=["habit_period"]),
-
                 ]
