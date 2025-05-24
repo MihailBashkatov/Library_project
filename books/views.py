@@ -5,12 +5,13 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from books.models import (Author, BookDetail, BookFinance, BookGeneral,
-                          BookGenre, Library, BookVolume, BookContent, BookFeature)
+                          BookGenre, Library, BookVolume, BookContent, BookFeature, Archive)
 from books.permissions import IsLibrarian, IsLibrarian, IsOwner
 from books.serializers import (AuthorSerializer, BookDetailSerializer,
                                BookFinanceSerializer, BookGeneralSerializer,
                                BookGenreSerializer, LibrarySerializer, BookVolumeSerializer, BookContentSerializer,
-                               BookFeatureSerializer, BookDetailClientSerializer)
+                               BookFeatureSerializer, BookDetailClientSerializer,
+                               ArchiveOrderSerializer)
 
 
 # from rest_framework.response import Response
@@ -490,3 +491,35 @@ class BookUpdateClientAPIView(generics.UpdateAPIView):
         IsAuthenticated,
         IsLibrarian,
     ]  # an access only for librarian
+
+
+
+
+class ArchiveOrderListAPIView(generics.ListAPIView):
+    """View to get list of archive orders"""
+
+    serializer_class = ArchiveOrderSerializer
+    queryset = Archive.objects.all()
+    permission_classes = [
+        IsAuthenticated,
+        IsLibrarian | IsAdminUser
+    ]  # an access only for librarian and admin
+
+class ClientArchiveOrderListAPIView(generics.ListAPIView):
+    """View to create a list of ordered books for particular client"""
+
+    serializer_class = ArchiveOrderSerializer
+    queryset = Archive.objects.all()
+    permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
+    # pagination_class = MyPagination
+
+    def get_queryset(self):
+
+        return Archive.objects.filter(user_card=self.request.user.user_card)
+
+    # def get(self, request, **kwargs):
+    #     """Adding logic for pagination"""
+    #     queryset = Habit.objects.filter(habit_user=self.request.user)
+    #     paginated_queryset = self.paginate_queryset(queryset)
+    #     serializer = HabitSerializer(paginated_queryset, many=True)
+    #     return self.get_paginated_response(serializer.data)
