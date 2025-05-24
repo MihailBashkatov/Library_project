@@ -21,7 +21,8 @@ from books.views import (AuthorCreateAPIView, AuthorDestroyAPIView,
                          BookContentCreateAPIView, BookContentsListAPIView, BookContentRetrieveAPIView,
                          BookContentUpdateAPIView, BookContentDestroyAPIView, BookFeatureCreateAPIView,
                          BookFeaturesListAPIView, BookFeatureRetrieveAPIView, BookFeatureUpdateAPIView,
-                         BookFeatureDestroyAPIView, BookUpdateClientAPIView)
+                         BookFeatureDestroyAPIView, BookUpdateClientAPIView,
+                         ArchiveOrderListAPIView, ClientArchiveOrderListAPIView)
 
 app_name = BooksConfig.name
 
@@ -136,7 +137,18 @@ urlpatterns = [
     path("feature/update/<int:pk>/", BookFeatureUpdateAPIView.as_view(), name="feature-update"),
     path("feature/delete/<int:pk>/", BookFeatureDestroyAPIView.as_view(), name="feature-delete"),
 
+    # Path for updating ordered book
     path("book_client/update/<int:pk>/", BookUpdateClientAPIView.as_view(), name="book_client-update"),
+
+    # Path to receive all orders archive
+    path("archive/", ArchiveOrderListAPIView.as_view(), name="archive-list"),
+
+    # Path to receive all orders archive for user
+    path("client/archive/", ClientArchiveOrderListAPIView.as_view(), name="client_archive-list"),
+
+
+
+
 
     # path("habit/public/<int:pk>/", PublicAPIView.as_view(), name="public-habit"),
 ]
