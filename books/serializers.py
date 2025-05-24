@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 
 from books.models import (Author, BookContent, BookDetail, BookFeature,
                           BookFinance, BookGeneral, BookGenre, BookVolume,
-                          Library)
+                          Library, Archive)
 from books.validators import IsBookTaken
 from users.serializers import UserSerializer
 
@@ -23,6 +23,13 @@ from users.serializers import UserSerializer
 #             HabitPeriodValidator(field=["habit_period"]),
 #
 #         ]
+
+class ArchiveOrderSerializer(serializers.ModelSerializer):
+    """Serializer for the model Archive."""
+
+    class Meta:
+        model = Archive
+        fields = "__all__"
 
 
 class LibrarySerializer(serializers.ModelSerializer):
@@ -150,14 +157,13 @@ class BookDetailSerializer(serializers.ModelSerializer):
 class BookDetailClientSerializer(serializers.ModelSerializer):
     """Serializer for the model BookDetail. If user takes or returns a book"""
 
-    book_volume = BookVolumeSerializer(many=True, read_only=True)
-
+    archive_order = ArchiveOrderSerializer(many=True, read_only=True)
     class Meta:
         model = BookDetail
 
         fields = [
             "client",
-            'book_volume'
+            "archive_order"
         ]
 
         validators = [
