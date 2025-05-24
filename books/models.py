@@ -280,7 +280,7 @@ class BookVolume(models.Model):
     )
 
     def __str__(self):
-        return f'{self.number}'
+        return f"{self.number}"
 
     class Meta:
         verbose_name = "Volume"
@@ -323,17 +323,21 @@ class BookFinance(models.Model):
 
 # Create Model BookContent
 class BookContent(models.Model):
-    book = models.ForeignKey(BookDetail,
-                             null=True,
-                             blank=True,
-                             on_delete=models.CASCADE,
-                             related_name="book_content")
+    book = models.ForeignKey(
+        BookDetail,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="book_content",
+    )
 
-    volume = models.ForeignKey(BookVolume,
-                               null=True,
-                               blank=True,
-                               on_delete=models.CASCADE,
-                               related_name="volume_content")
+    volume = models.ForeignKey(
+        BookVolume,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="volume_content",
+    )
 
     number = models.CharField(
         max_length=100,
@@ -351,42 +355,46 @@ class BookContent(models.Model):
         verbose_name = "Content"
         verbose_name_plural = "Contents"
 
-# class HistoryBookDetailPerClient(models.Model):
-#
-#     book = models.ForeignKey(
-#         BookDetail,
-#         on_delete=models.DO_NOTHING,
-#         null=True,
-#         blank=True,
-#         related_name="book_detail",
-#     )
-#
-#     client = models.ForeignKey(
-#         User,
-#         on_delete=models.DO_NOTHING,
-#         null=True,
-#         blank=True,
-#         related_name="client",
-#     )
-#
-#     taken_by_client = models.DateTimeField(
-#         auto_now=False, null=True, blank=True, default=None, verbose_name="Date, when Taken by client"
-#     )
-#
-#     return_date = models.DateTimeField(
-#         auto_now=False,
-#         null=True,
-#         blank=True,
-#         verbose_name="Date, when shall be return by client",
-#     )
-#
-#     is_overdue = models.BooleanField(default=False)
-#
-#     is_payment_done = models.BooleanField(default=None)
-#
-#     def __str__(self):
-#         return self.book
-#
-#     class Meta:
-#         verbose_name = "Book"
-#         verbose_name_plural = "Books"
+
+# Create Model Archive
+class Archive(models.Model):
+
+    order = models.ForeignKey(
+        BookDetail,
+        on_delete=models.DO_NOTHING,
+        null=True,
+        blank=True,
+        related_name="archive_order",
+    )
+
+    title = models.CharField(max_length=300, verbose_name="Book Title")
+
+    user_card = models.PositiveSmallIntegerField(
+        null=True, blank=True, verbose_name="User card number"
+    )
+
+    taken_by_client = models.DateTimeField(
+        auto_now=False,
+        null=True,
+        blank=True,
+        default=None,
+        verbose_name="Date, when book is taken by client",
+    )
+
+    return_date = models.DateTimeField(
+        auto_now=False,
+        null=True,
+        blank=True,
+        verbose_name="Date, when book returned by client",
+    )
+
+    order_continued_times = models.PositiveSmallIntegerField(
+        null=False, blank=False, default=0, verbose_name="Times to continue order"
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Archive"
+        verbose_name_plural = "Archives"
