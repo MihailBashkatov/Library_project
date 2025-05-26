@@ -1,27 +1,34 @@
-# from django.http import HttpResponseForbidden
 from rest_framework import generics, status
-from rest_framework.exceptions import ValidationError
-# from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from books.models import (Author, BookDetail, BookFinance, BookGeneral,
-                          BookGenre, Library, BookVolume, BookContent, BookFeature, Archive)
-from books.permissions import IsLibrarian, IsLibrarian, IsOwner
-from books.serializers import (AuthorSerializer, BookDetailSerializer,
-                               BookFinanceSerializer, BookGeneralSerializer,
-                               BookGenreSerializer, LibrarySerializer, BookVolumeSerializer, BookContentSerializer,
-                               BookFeatureSerializer, BookDetailClientSerializer,
-                               ArchiveOrderSerializer)
+from books.models import (
+    Author,
+    BookDetail,
+    BookFinance,
+    BookGeneral,
+    BookGenre,
+    Library,
+    BookVolume,
+    BookContent,
+    BookFeature,
+    Archive,
+)
+from books.permissions import IsLibrarian, IsOwner
+from books.serializers import (
+    AuthorSerializer,
+    BookDetailSerializer,
+    BookFinanceSerializer,
+    BookGeneralSerializer,
+    BookGenreSerializer,
+    LibrarySerializer,
+    BookVolumeSerializer,
+    BookContentSerializer,
+    BookFeatureSerializer,
+    BookDetailClientSerializer,
+    ArchiveOrderSerializer,
+)
 
 
-# from rest_framework.response import Response
-# from rest_framework.views import APIView
-#
-# from books.models import Habit
-# from books.paginators import MyPagination
-# from books.permissions import IsOwner
-# from books.serializers import HabitSerializer
-#
 #
 class BookCreateAPIView(generics.CreateAPIView):
     """View to create a book"""
@@ -444,11 +451,12 @@ class BookContentDestroyAPIView(generics.DestroyAPIView):
     queryset = BookContent.objects.all()
     permission_classes = [IsAuthenticated, IsLibrarian]  # an access only for librarian
 
+
 class BookFeatureCreateAPIView(generics.CreateAPIView):
     """View to create a book feature"""
 
     serializer_class = BookFeatureSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser] # an access only for admin
+    permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
 
 
 class BookFeaturesListAPIView(generics.ListAPIView):
@@ -456,7 +464,7 @@ class BookFeaturesListAPIView(generics.ListAPIView):
 
     serializer_class = BookFeatureSerializer
     queryset = BookFeature.objects.all()
-    permission_classes = [IsAuthenticated, IsAdminUser] # an access only for admin
+    permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
 
 
 class BookFeatureRetrieveAPIView(generics.RetrieveAPIView):
@@ -464,7 +472,7 @@ class BookFeatureRetrieveAPIView(generics.RetrieveAPIView):
 
     serializer_class = BookFeatureSerializer
     queryset = BookFeature.objects.all()
-    permission_classes = [IsAuthenticated, IsAdminUser] # an access only for admin
+    permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
 
 
 class BookFeatureUpdateAPIView(generics.UpdateAPIView):
@@ -493,8 +501,6 @@ class BookUpdateClientAPIView(generics.UpdateAPIView):
     ]  # an access only for librarian
 
 
-
-
 class ArchiveOrderListAPIView(generics.ListAPIView):
     """View to get list of archive orders"""
 
@@ -502,8 +508,9 @@ class ArchiveOrderListAPIView(generics.ListAPIView):
     queryset = Archive.objects.all()
     permission_classes = [
         IsAuthenticated,
-        IsLibrarian | IsAdminUser
+        IsLibrarian | IsAdminUser,
     ]  # an access only for librarian and admin
+
 
 class ClientArchiveOrderListAPIView(generics.ListAPIView):
     """View to create a list of ordered books for particular client"""
