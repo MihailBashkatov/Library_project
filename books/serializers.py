@@ -2,27 +2,12 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from books.models import (Author, BookContent, BookDetail, BookFeature,
-                          BookFinance, BookGeneral, BookGenre, BookVolume,
-                          Library, Archive)
+from books.models import (Archive, Author, BookContent, BookDetail,
+                          BookFeature, BookFinance, BookGeneral, BookGenre,
+                          BookVolume, Library)
 from books.validators import IsBookTaken
 from users.serializers import UserSerializer
 
-# class HabitSerializer(serializers.ModelSerializer):
-#     habit_date = serializers.DateTimeField(required=True,
-#                                            input_formats=["%Y-%m-%d %H:%M"])
-#     """Serializer for the model Habit."""
-#     class Meta:
-#         model = Habit
-#         fields = "__all__"
-#         validators = [
-#             TimeDurationValidator(field=["habit_time_duration"]),
-#             RewardOrHabitRelatedValidator(field=["related_habit", "habit_reward"]),
-#             NiceHabitRelatedValidator(field=["related_habit"]),
-#             NiceNotRewardNotRelatedHabitValidator(field=["is_nice_habit"]),
-#             HabitPeriodValidator(field=["habit_period"]),
-#
-#         ]
 
 class ArchiveOrderSerializer(serializers.ModelSerializer):
     """Serializer for the model Archive."""
@@ -93,7 +78,21 @@ class BookVolumeSerializer(serializers.ModelSerializer):
 class BookGeneralSerializer(serializers.ModelSerializer):
     """Serializer for the model BookGeneral."""
 
-    # genre = BookGenreSerializer(read_only=True, many=True)
+    genre = BookGenreSerializer(read_only=True)
+
+    def to_internal_value(self, data):
+        genre_pk = data.get("genre_book")
+
+        internal_data = super().to_internal_value(data)
+        try:
+            genre = BookGeneral.objects.get(pk=genre_pk)
+        except BookGeneral.DoesNotExist:
+            raise ValidationError(
+                {"genre": ["Invalid genre primary key"]},
+                code="invalid",
+            )
+        internal_data["genre"] = genre
+        return internal_data
 
     class Meta:
         model = BookGeneral
@@ -106,7 +105,7 @@ class BookGeneralSerializer(serializers.ModelSerializer):
             "age_restriction",
             "rating",
             "is_available",
-            # "genre",
+            "genre",
             "is_book_popular",
         ]
 
@@ -119,8 +118,9 @@ class BookDetailSerializer(serializers.ModelSerializer):
     book_content = BookContentSerializer(read_only=True, many=True)
     book_general = BookGeneralSerializer(read_only=True)
     client = UserSerializer(read_only=True)
-    taken_by_client = serializers.DateTimeField(required=True,
-                                           input_formats=["%Y-%m-%d %H:%M"])
+    taken_by_client = serializers.DateTimeField(
+        required=True, input_formats=["%Y-%m-%d %H:%M"]
+    )
 
     def to_internal_value(self, data):
         book_general_pk = data.get("book_general")
@@ -154,18 +154,17 @@ class BookDetailSerializer(serializers.ModelSerializer):
             "book_volume",
         ]
 
+
 class BookDetailClientSerializer(serializers.ModelSerializer):
     """Serializer for the model BookDetail. If user takes or returns a book"""
 
     archive_order = ArchiveOrderSerializer(many=True, read_only=True)
+
     class Meta:
         model = BookDetail
 
-        fields = [
-            "client",
-            "archive_order"
-        ]
+        fields = ["client", "archive_order"]
 
         validators = [
-                    IsBookTaken(field=["client"]),
-                ]
+            IsBookTaken(field=["client"]),
+        ]
