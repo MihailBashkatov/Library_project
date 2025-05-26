@@ -1,5 +1,4 @@
 from django.db import models
-
 from users.models import User
 
 
@@ -47,42 +46,6 @@ class Author(models.Model):
     class Meta:
         verbose_name = "Author"
         verbose_name_plural = "Authors"
-
-
-# # Create Model BookGenre
-# class BookGenre(models.Model):
-#     ADVENTURE = "Adventure"
-#     KIDS = "Kids"
-#     CLASSIC = "Classic"
-#     FOREIGN_LANGUAGE = "Foreign_language"
-#     FANTASY = "Fantasy"
-#     SCIENCE = "Science"
-#     MIX = "Mix"
-#
-#     STATUS_CHOICES = [
-#         (ADVENTURE, "Adventure"),
-#         (KIDS, "Kids"),
-#         (CLASSIC, "Classic"),
-#         (FOREIGN_LANGUAGE, "Foreign_language"),
-#         (FANTASY, "Fantasy"),
-#         (SCIENCE, "Science"),
-#         (MIX, "Mix"),
-#     ]
-#
-#     genre = models.CharField(
-#         max_length=16,
-#         choices=STATUS_CHOICES,
-#         verbose_name="Book genre",
-#         null=False,
-#         blank=False
-#     )
-#
-#     def __str__(self):
-#         return self.genre
-#
-#     class Meta:
-#         verbose_name = "Genre"
-#         verbose_name_plural = "Genres"
 
 
 # Create Model BookGenre
@@ -167,19 +130,11 @@ class BookGeneral(models.Model):
 
     is_available = models.BooleanField(default=True)
 
-    # genre = models.ForeignKey(
-    #     BookGenre,
-    #     on_delete=models.DO_NOTHING,
-    #     null=False,
-    #     blank=False,
-    #     related_name="book_genre",
-    # )
-
     genre = models.ForeignKey(
         BookGenre,
         on_delete=models.DO_NOTHING,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         related_name="genre_book",
     )
 
