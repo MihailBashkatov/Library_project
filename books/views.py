@@ -1,10 +1,12 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
+
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from books.models import (Archive, Author, BookContent, BookDetail,
                           BookFeature, BookFinance, BookGeneral, BookGenre,
                           BookVolume, Library)
-from books.paginators import MyPagination
 from books.permissions import IsLibrarian, IsOwner
 from books.serializers import (ArchiveOrderSerializer, AuthorSerializer,
                                BookContentSerializer,
@@ -30,14 +32,48 @@ class BooksListAPIView(generics.ListAPIView):
     permission_classes = [
         AllowAny,
     ]  # access for all users
-    pagination_class = MyPagination
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = (
+                        "book_general",
+                        "client",
+                        "edition_year",
+                        "page_amount",
+                        "taken_by_client",
+                        "due_date",
+                        "is_overdue",
+                        "book_content",
+                        "feature",
+                        "book_finance",
+                        "book_volume",
+                                )
 
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = BookDetail.objects.all()
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = BookDetailSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+    ordering_fields =   ("book_general",
+                        "client",
+                        "edition_year",
+                        "page_amount",
+                        "taken_by_client",
+                        "due_date",
+                        "is_overdue",
+                        "book_content",
+                        "feature",
+                        "book_finance",
+                        "book_volume",)
+
+
+    search_fields =     ("book_general__title",
+                        "book_general__description",
+                        "client__email",
+                        "edition_year",
+                        "page_amount",
+                        "taken_by_client",
+                        "due_date",
+                        "is_overdue",
+                        "book_content__content",
+                        "feature__feature",
+                        "book_finance__price",
+                        "book_volume__number",
+                         )
+
 
 
 class BooksUserListAPIView(generics.ListAPIView):
@@ -46,18 +82,48 @@ class BooksUserListAPIView(generics.ListAPIView):
     serializer_class = BookDetailSerializer
     queryset = BookDetail.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
-    pagination_class = MyPagination
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = (
+                        "book_general",
+                        "edition_year",
+                        "page_amount",
+                        "taken_by_client",
+                        "due_date",
+                        "is_overdue",
+                        "book_content",
+                        "feature",
+                        "book_finance",
+                        "book_volume",
+                    )
 
+    ordering_fields = (
+                        "book_general",
+                        "edition_year",
+                        "page_amount",
+                        "taken_by_client",
+                        "due_date",
+                        "is_overdue",
+                        "book_content",
+                        "feature",
+                        "book_finance",
+                        "book_volume",
+                    )
+
+    search_fields = (
+                        "book_general",
+                        "edition_year",
+                        "page_amount",
+                        "taken_by_client",
+                        "due_date",
+                        "is_overdue",
+                        "book_content",
+                        "feature",
+                        "book_finance",
+                        "book_volume",
+                    )
     def get_queryset(self):
+
         return BookDetail.objects.filter(client=self.request.user)
-
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = BookDetail.objects.filter(client=self.request.user)
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = BookDetailSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
-
 
 class BookRetrieveAPIView(generics.RetrieveAPIView):
     """View to get a particular book for the user"""
@@ -105,14 +171,12 @@ class AuthorsListAPIView(generics.ListAPIView):
     permission_classes = [
         AllowAny,
     ]  #  access for all
-    pagination_class = MyPagination
 
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = Author.objects.all()
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = AuthorSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ("name", "surname", "birth_date")
+    ordering_fields = ("name", "surname", "birth_date")
+    search_fields = ("name", "surname", "birth_date")
+
 
 
 class AuthorRetrieveAPIView(generics.RetrieveAPIView):
@@ -162,14 +226,38 @@ class BookGeneralsListAPIView(generics.ListAPIView):
         IsAuthenticated,
         IsLibrarian,
     ]  # an access only for librarian
-    pagination_class = MyPagination
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = (
+                        "library",
+                        "title",
+                        "author",
+                        "age_restriction",
+                        "rating",
+                        "is_available",
+                        "genre",
+                        "is_book_popular",)
 
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = BookGeneral.objects.all()
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = BookGeneralSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+    ordering_fields = ( "library",
+                        "title",
+                        "author",
+                        "age_restriction",
+                        "rating",
+                        "is_available",
+                        "genre",
+                        "is_book_popular",)
+
+    search_fields = (
+                        "title",
+                        "author__name",
+                        "author__surname",
+                        "description",
+                        "age_restriction",
+                        "rating",
+                        "genre__genre",
+                        "is_book_popular",)
+
+
+
 
 
 class BookGeneralRetrieveAPIView(generics.RetrieveAPIView):
@@ -255,14 +343,12 @@ class GenresListAPIView(generics.ListAPIView):
     serializer_class = BookGenreSerializer
     queryset = BookGenre.objects.all()
     permission_classes = [IsAuthenticated, IsLibrarian]  # an access only for librarian
-    pagination_class = MyPagination
 
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = BookGenre.objects.all()
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = BookGenreSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = ("genre",)
+    ordering_fields = ("genre",)
+    search_fields = ("genre",)
+
 
 
 class GenreRetrieveAPIView(generics.RetrieveAPIView):
@@ -300,21 +386,36 @@ class BookFinanceCreateAPIView(generics.CreateAPIView):
     serializer_class = BookFinanceSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
 
-
+#CHECK
 class BookFinancesListAPIView(generics.ListAPIView):
     """View to create a list of book finances"""
 
     serializer_class = BookFinanceSerializer
     queryset = BookFinance.objects.all()
     permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
-    pagination_class = MyPagination
 
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = BookFinance.objects.all()
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = BookFinanceSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields =    ("book",
+                          "price",
+                          "overdue_date",
+                          "penalty_sum",
+                          "end_overdue",
+                          "is_payment_done",)
+
+    ordering_fields =     ("book",
+                          "price",
+                          "overdue_date",
+                          "penalty_sum",
+                          "end_overdue",
+                          "is_payment_done",)
+
+    search_fields =       ("book",
+                          "price",
+                          "overdue_date",
+                          "penalty_sum",
+                          "end_overdue",
+                          "is_payment_done",)
+
 
 
 class BookFinanceRetrieveAPIView(generics.RetrieveAPIView):
@@ -353,14 +454,7 @@ class BookVolumesListAPIView(generics.ListAPIView):
     serializer_class = BookVolumeSerializer
     queryset = BookVolume.objects.all()
     permission_classes = [IsAuthenticated, IsLibrarian]  # an access only for librarian
-    pagination_class = MyPagination
 
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = BookVolume.objects.all()
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = BookVolumeSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
 
 
 class BookVolumeRetrieveAPIView(generics.RetrieveAPIView):
@@ -399,14 +493,10 @@ class BookContentsListAPIView(generics.ListAPIView):
     serializer_class = BookContentSerializer
     queryset = BookContent.objects.all()
     permission_classes = [IsAuthenticated, IsLibrarian]  # an access only for librarian
-    pagination_class = MyPagination
 
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = BookContent.objects.all()
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = BookContentSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    search_fields = ("content",)
+
 
 
 class BookContentRetrieveAPIView(generics.RetrieveAPIView):
@@ -486,18 +576,33 @@ class ArchiveOrderListAPIView(generics.ListAPIView):
 
     serializer_class = ArchiveOrderSerializer
     queryset = Archive.objects.all()
-    pagination_class = MyPagination
     permission_classes = [
         IsAuthenticated,
         IsLibrarian | IsAdminUser,
     ]  # an access only for librarian and admin
 
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = Archive.objects.all()
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = ArchiveOrderSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+#CHECK ALL
+    filterset_fields =    ("order",
+                          "title",
+                          "user_card",
+                          "taken_by_client",
+                          "return_date",
+                          "order_continued_times")
+    ordering_fields =     ("order",
+                          "title",
+                          "user_card",
+                          "taken_by_client",
+                          "return_date",
+                          "order_continued_times")
+
+    search_fields =       ("order",
+                          "title",
+                          "user_card",
+                          "taken_by_client",
+                          "return_date",
+                          "order_continued_times")
+
 
 
 class ClientArchiveOrderListAPIView(generics.ListAPIView):
@@ -506,15 +611,30 @@ class ClientArchiveOrderListAPIView(generics.ListAPIView):
     serializer_class = ArchiveOrderSerializer
     queryset = Archive.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
-    pagination_class = MyPagination
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+
+# CHECK ALL
+    filterset_fields = ("order",
+                        "title",
+                        "user_card",
+                        "taken_by_client",
+                        "return_date",
+                        "order_continued_times")
+
+    ordering_fields = ("order",
+                       "title",
+                       "user_card",
+                       "taken_by_client",
+                       "return_date",
+                       "order_continued_times")
+
+    search_fields = ("order",
+                     "title",
+                     "user_card",
+                     "taken_by_client",
+                     "return_date",
+                     "order_continued_times")
 
     def get_queryset(self):
 
-        return Archive.objects.filter(user_card=self.request.user.user_card)
-
-    def get(self, request, **kwargs):
-        """Adding logic for pagination"""
-        queryset = Archive.objects.filter(user_card=self.request.user)
-        paginated_queryset = self.paginate_queryset(queryset)
-        serializer = ArchiveOrderSerializer(paginated_queryset, many=True)
-        return self.get_paginated_response(serializer.data)
+        return BookVolumeDestroyAPIView.objects.filter(client=self.request.user)
