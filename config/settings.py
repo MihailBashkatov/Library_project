@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_filters", # adding django_filters
     "drf_yasg",  # adding app drf-yasg
     "corsheaders",  # adding app corsheaders
     "django_celery_beat",  # adding app django_celery_beat
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     "users",  # adding app users
     "books",  # adding app books
     "rest_framework_simplejwt",  # adding simplejwt
+
 ]
 
 MIDDLEWARE = [
@@ -136,10 +138,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 
 REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ['django_filters.rest_framework.DjangoFilterBackend',],
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': 5,
 }
 
 SIMPLE_JWT = {
