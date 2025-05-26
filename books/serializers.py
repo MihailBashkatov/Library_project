@@ -14,7 +14,12 @@ class ArchiveOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Archive
-        fields = "__all__"
+        fields = ["order",
+                  "title",
+                  "user_card",
+                  "taken_by_client",
+                  "return_date",
+                  "order_continued_times"]
 
 
 class LibrarySerializer(serializers.ModelSerializer):
@@ -30,7 +35,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = "__all__"
+        fields = ["name", "surname", "birth_date"]
 
 
 class BookGenreSerializer(serializers.ModelSerializer):
@@ -38,7 +43,7 @@ class BookGenreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookGenre
-        fields = "__all__"
+        fields = ["genre",]
 
 
 class BookFeatureSerializer(serializers.ModelSerializer):
@@ -62,7 +67,13 @@ class BookFinanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookFinance
-        fields = "__all__"
+        fields = ["book",
+                  "price",
+                  "overdue_date",
+                  "penalty_sum",
+                  "end_overdue",
+                  "is_payment_done",]
+
 
 
 class BookVolumeSerializer(serializers.ModelSerializer):
