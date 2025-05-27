@@ -1,7 +1,6 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter, SearchFilter
-
 from rest_framework import generics
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from books.models import (Archive, Author, BookContent, BookDetail,
@@ -34,46 +33,47 @@ class BooksListAPIView(generics.ListAPIView):
     ]  # access for all users
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = (
-                        "book_general",
-                        "client",
-                        "edition_year",
-                        "page_amount",
-                        "taken_by_client",
-                        "due_date",
-                        "is_overdue",
-                        "book_content",
-                        "feature",
-                        "book_finance",
-                        "book_volume",
-                                )
+        "book_general",
+        "client",
+        "edition_year",
+        "page_amount",
+        "taken_by_client",
+        "due_date",
+        "is_overdue",
+        "book_content",
+        "feature",
+        "book_finance",
+        "book_volume",
+    )
 
-    ordering_fields =   ("book_general",
-                        "client",
-                        "edition_year",
-                        "page_amount",
-                        "taken_by_client",
-                        "due_date",
-                        "is_overdue",
-                        "book_content",
-                        "feature",
-                        "book_finance",
-                        "book_volume",)
+    ordering_fields = (
+        "book_general",
+        "client",
+        "edition_year",
+        "page_amount",
+        "taken_by_client",
+        "due_date",
+        "is_overdue",
+        "book_content",
+        "feature",
+        "book_finance",
+        "book_volume",
+    )
 
-
-    search_fields =     ("book_general__title",
-                        "book_general__description",
-                        "client__email",
-                        "edition_year",
-                        "page_amount",
-                        "taken_by_client",
-                        "due_date",
-                        "is_overdue",
-                        "book_content__content",
-                        "feature__feature",
-                        "book_finance__price",
-                        "book_volume__number",
-                         )
-
+    search_fields = (
+        "book_general__title",
+        "book_general__description",
+        "client__email",
+        "edition_year",
+        "page_amount",
+        "taken_by_client",
+        "due_date",
+        "is_overdue",
+        "book_content__content",
+        "feature__feature",
+        "book_finance__price",
+        "book_volume__number",
+    )
 
 
 class BooksUserListAPIView(generics.ListAPIView):
@@ -84,46 +84,48 @@ class BooksUserListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = (
-                        "book_general",
-                        "edition_year",
-                        "page_amount",
-                        "taken_by_client",
-                        "due_date",
-                        "is_overdue",
-                        "book_content",
-                        "feature",
-                        "book_finance",
-                        "book_volume",
-                    )
+        "book_general",
+        "edition_year",
+        "page_amount",
+        "taken_by_client",
+        "due_date",
+        "is_overdue",
+        "book_content",
+        "feature",
+        "book_finance",
+        "book_volume",
+    )
 
     ordering_fields = (
-                        "book_general",
-                        "edition_year",
-                        "page_amount",
-                        "taken_by_client",
-                        "due_date",
-                        "is_overdue",
-                        "book_content",
-                        "feature",
-                        "book_finance",
-                        "book_volume",
-                    )
+        "book_general",
+        "edition_year",
+        "page_amount",
+        "taken_by_client",
+        "due_date",
+        "is_overdue",
+        "book_content",
+        "feature",
+        "book_finance",
+        "book_volume",
+    )
 
     search_fields = (
-                        "book_general",
-                        "edition_year",
-                        "page_amount",
-                        "taken_by_client",
-                        "due_date",
-                        "is_overdue",
-                        "book_content",
-                        "feature",
-                        "book_finance",
-                        "book_volume",
-                    )
+        "book_general",
+        "edition_year",
+        "page_amount",
+        "taken_by_client",
+        "due_date",
+        "is_overdue",
+        "book_content",
+        "feature",
+        "book_finance",
+        "book_volume",
+    )
+
     def get_queryset(self):
 
         return BookDetail.objects.filter(client=self.request.user)
+
 
 class BookRetrieveAPIView(generics.RetrieveAPIView):
     """View to get a particular book for the user"""
@@ -178,7 +180,6 @@ class AuthorsListAPIView(generics.ListAPIView):
     search_fields = ("name", "surname", "birth_date")
 
 
-
 class AuthorRetrieveAPIView(generics.RetrieveAPIView):
     """View to get a particular author"""
 
@@ -228,36 +229,37 @@ class BookGeneralsListAPIView(generics.ListAPIView):
     ]  # an access only for librarian
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = (
-                        "library",
-                        "title",
-                        "author",
-                        "age_restriction",
-                        "rating",
-                        "is_available",
-                        "genre",
-                        "is_book_popular",)
+        "library",
+        "title",
+        "author",
+        "age_restriction",
+        "rating",
+        "is_available",
+        "genre",
+        "is_book_popular",
+    )
 
-    ordering_fields = ( "library",
-                        "title",
-                        "author",
-                        "age_restriction",
-                        "rating",
-                        "is_available",
-                        "genre",
-                        "is_book_popular",)
+    ordering_fields = (
+        "library",
+        "title",
+        "author",
+        "age_restriction",
+        "rating",
+        "is_available",
+        "genre",
+        "is_book_popular",
+    )
 
     search_fields = (
-                        "title",
-                        "author__name",
-                        "author__surname",
-                        "description",
-                        "age_restriction",
-                        "rating",
-                        "genre__genre",
-                        "is_book_popular",)
-
-
-
+        "title",
+        "author__name",
+        "author__surname",
+        "description",
+        "age_restriction",
+        "rating",
+        "genre__genre",
+        "is_book_popular",
+    )
 
 
 class BookGeneralRetrieveAPIView(generics.RetrieveAPIView):
@@ -350,7 +352,6 @@ class GenresListAPIView(generics.ListAPIView):
     search_fields = ("genre",)
 
 
-
 class GenreRetrieveAPIView(generics.RetrieveAPIView):
     """View to get a particular genre"""
 
@@ -386,7 +387,8 @@ class BookFinanceCreateAPIView(generics.CreateAPIView):
     serializer_class = BookFinanceSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
 
-#CHECK
+
+# CHECK
 class BookFinancesListAPIView(generics.ListAPIView):
     """View to create a list of book finances"""
 
@@ -395,27 +397,31 @@ class BookFinancesListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
 
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
-    filterset_fields =    ("book",
-                          "price",
-                          "overdue_date",
-                          "penalty_sum",
-                          "end_overdue",
-                          "is_payment_done",)
+    filterset_fields = (
+        "book",
+        "price",
+        "overdue_date",
+        "penalty_sum",
+        "end_overdue",
+        "is_payment_done",
+    )
 
-    ordering_fields =     ("book",
-                          "price",
-                          "overdue_date",
-                          "penalty_sum",
-                          "end_overdue",
-                          "is_payment_done",)
+    ordering_fields = (
+        "book",
+        "price",
+        "overdue_date",
+        "penalty_sum",
+        "end_overdue",
+        "is_payment_done",
+    )
 
-    search_fields =       ("book",
-                          "price",
-                          "overdue_date",
-                          "penalty_sum",
-                          "end_overdue",
-                          "is_payment_done",)
-
+    search_fields = (
+        "price",
+        "overdue_date",
+        "penalty_sum",
+        "end_overdue",
+        "is_payment_done",
+    )
 
 
 class BookFinanceRetrieveAPIView(generics.RetrieveAPIView):
@@ -454,7 +460,6 @@ class BookVolumesListAPIView(generics.ListAPIView):
     serializer_class = BookVolumeSerializer
     queryset = BookVolume.objects.all()
     permission_classes = [IsAuthenticated, IsLibrarian]  # an access only for librarian
-
 
 
 class BookVolumeRetrieveAPIView(generics.RetrieveAPIView):
@@ -496,7 +501,6 @@ class BookContentsListAPIView(generics.ListAPIView):
 
     filter_backends = [DjangoFilterBackend, SearchFilter]
     search_fields = ("content",)
-
 
 
 class BookContentRetrieveAPIView(generics.RetrieveAPIView):
@@ -582,27 +586,30 @@ class ArchiveOrderListAPIView(generics.ListAPIView):
     ]  # an access only for librarian and admin
 
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
-#CHECK ALL
-    filterset_fields =    ("order",
-                          "title",
-                          "user_card",
-                          "taken_by_client",
-                          "return_date",
-                          "order_continued_times")
-    ordering_fields =     ("order",
-                          "title",
-                          "user_card",
-                          "taken_by_client",
-                          "return_date",
-                          "order_continued_times")
 
-    search_fields =       ("order",
-                          "title",
-                          "user_card",
-                          "taken_by_client",
-                          "return_date",
-                          "order_continued_times")
+    filterset_fields = (
+        "order",
+        "title",
+        "user_card",
+        "taken_by_client",
+        "return_date",
+        "order_continued_times",
+    )
+    ordering_fields = (
+        "order",
+        "title",
+        "user_card",
+        "taken_by_client",
+        "return_date",
+        "order_continued_times",
+    )
 
+    search_fields = (
+        "title",
+        "user_card",
+        "taken_by_client",
+        "return_date",
+    )
 
 
 class ClientArchiveOrderListAPIView(generics.ListAPIView):
@@ -613,28 +620,30 @@ class ClientArchiveOrderListAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
 
-# CHECK ALL
-    filterset_fields = ("order",
-                        "title",
-                        "user_card",
-                        "taken_by_client",
-                        "return_date",
-                        "order_continued_times")
+    filterset_fields = (
+        "order",
+        "title",
+        "user_card",
+        "taken_by_client",
+        "return_date",
+        "order_continued_times",
+    )
+    ordering_fields = (
+        "order",
+        "title",
+        "user_card",
+        "taken_by_client",
+        "return_date",
+        "order_continued_times",
+    )
 
-    ordering_fields = ("order",
-                       "title",
-                       "user_card",
-                       "taken_by_client",
-                       "return_date",
-                       "order_continued_times")
-
-    search_fields = ("order",
-                     "title",
-                     "user_card",
-                     "taken_by_client",
-                     "return_date",
-                     "order_continued_times")
+    search_fields = (
+        "title",
+        "user_card",
+        "taken_by_client",
+        "return_date",
+    )
 
     def get_queryset(self):
 
-        return BookVolumeDestroyAPIView.objects.filter(client=self.request.user)
+        return Archive.objects.filter(user_card=self.request.user.user_card)
