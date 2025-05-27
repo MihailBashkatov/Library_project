@@ -3,6 +3,7 @@ from rest_framework.serializers import ValidationError
 from django.utils import timezone
 from django.utils.timezone import localtime
 from books.models import BookDetail, Archive
+from books.tasks import send_tg_message_book_taken, send_tg_message_book_returned
 
 
 class IsBookTaken:
@@ -30,6 +31,7 @@ class IsBookTaken:
         # Get client
         client = value.get("client")
 
+
         # If client exists, get client's user_card
         if client:
             user_card = client.user_card
@@ -40,9 +42,17 @@ class IsBookTaken:
         # Logic if client is chosen as None. It is needed when client returns a book and then
         # book is not linked to any client, taken time and due date are becoming Null
         if not client:
+
+            # Get TG chat id of a client
+            client_tg_chat_id = book.client.telegram_chat_id
+
             book.taken_by_client = None  # Set null
             book.due_date = None  # Set null
             book.client = None  # Set null
+
+
+            # Send tg message to the client
+            send_tg_message_book_returned.delay(client_tg_chat_id, str(book))
             book.save()
 
             # Logic to find if order for the book exists. If exists, then in Archive table this order sets time
@@ -139,4 +149,12 @@ class IsBookTaken:
             book.due_date = book.taken_by_client + timedelta(
                 days=30
             )  # Set time for returning the book
+
+            # Get TG chat id of a client
+            client_tg_chat_id = client.telegram_chat_id
+
+            # Send tg message to the client
+            send_tg_message_book_taken.delay(client_tg_chat_id, str(book), book.due_date)
+
+
             book.save()
