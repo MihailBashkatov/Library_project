@@ -81,15 +81,6 @@ class Command(BaseCommand):
             self.style.SUCCESS(f"Successfully added {len(authors)} authors")
         )
 
-        # genres = [
-        #     {"genre": BookGenre.FOREIGN_LANGUAGE},
-        #     {"genre": BookGenre.FANTASY},
-        #     {"genre": BookGenre.CLASSIC},
-        #     {"genre": BookGenre.KIDS},
-        #     {"genre": BookGenre.ADVENTURE},
-        #     {"genre": BookGenre.SCIENCE},
-        #     {"genre": BookGenre.MIX},
-        # ]
 
         genres = [
             {"genre": "Adventure"},
