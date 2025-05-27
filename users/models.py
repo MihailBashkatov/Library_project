@@ -22,8 +22,8 @@ class User(AbstractUser):
         max_length=100, verbose_name="Telegram chat ID", blank=True, null=True
     )
 
-    user_card = models.PositiveSmallIntegerField(
-        null=True, blank=True, verbose_name="User card number"
+    user_card = models.CharField(
+        max_length=5, verbose_name="User card", blank=True, null=True
     )
 
     is_librarian = models.BooleanField(default=False)
