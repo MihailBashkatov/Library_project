@@ -9,19 +9,6 @@ from books.validators import IsBookTaken
 from users.serializers import UserSerializer
 
 
-class ArchiveOrderSerializer(serializers.ModelSerializer):
-    """Serializer for the model Archive."""
-
-    class Meta:
-        model = Archive
-        fields = ["order",
-                  "title",
-                  "user_card",
-                  "taken_by_client",
-                  "return_date",
-                  "order_continued_times"]
-
-
 class LibrarySerializer(serializers.ModelSerializer):
     """Serializer for the model Library."""
 
@@ -43,7 +30,9 @@ class BookGenreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookGenre
-        fields = ["genre",]
+        fields = [
+            "genre",
+        ]
 
 
 class BookFeatureSerializer(serializers.ModelSerializer):
@@ -67,13 +56,13 @@ class BookFinanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookFinance
-        fields = ["book",
-                  "price",
-                  "overdue_date",
-                  "penalty_sum",
-                  "end_overdue",
-                  "is_payment_done",]
-
+        fields = [
+            "book",
+            "price",
+            "overdue_day",
+            "overdue_date",
+            "penalty_sum",
+        ]
 
 
 class BookVolumeSerializer(serializers.ModelSerializer):
@@ -163,6 +152,50 @@ class BookDetailSerializer(serializers.ModelSerializer):
             "feature",
             "book_finance",
             "book_volume",
+        ]
+
+
+class BookFinanceArchiveSerializer(serializers.ModelSerializer):
+    """Serializer to get only book_finance on BookDetail."""
+
+    book_finance = BookFinanceSerializer(read_only=True)
+
+    class Meta:
+        model = BookDetail
+        fields = ["book_finance"]
+
+
+class ArchiveOrderSerializer(serializers.ModelSerializer):
+    """Serializer for the model Archive."""
+
+    order = BookFinanceArchiveSerializer(read_only=True)
+
+    def to_internal_value(self, data):
+        order_pk = data.get("archive_order")
+
+        internal_data = super().to_internal_value(data)
+        try:
+            order = Archive.objects.get(pk=order_pk)
+        except Archive.DoesNotExist:
+            raise ValidationError(
+                {"order": ["Invalid order primary key"]},
+                code="invalid",
+            )
+        internal_data["order"] = order
+        return internal_data
+
+    class Meta:
+        model = Archive
+        fields = [
+            "order",
+            "title",
+            "user_card",
+            "taken_by_client",
+            "return_date",
+            "order_continued_times",
+            "is_overdue",
+            "payment_date",
+            "payed_sum",
         ]
 
 
