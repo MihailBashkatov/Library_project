@@ -388,7 +388,6 @@ class BookFinanceCreateAPIView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated, IsAdminUser]  # an access only for admin
 
 
-# CHECK
 class BookFinancesListAPIView(generics.ListAPIView):
     """View to create a list of book finances"""
 
@@ -402,8 +401,6 @@ class BookFinancesListAPIView(generics.ListAPIView):
         "price",
         "overdue_date",
         "penalty_sum",
-        "end_overdue",
-        "is_payment_done",
     )
 
     ordering_fields = (
@@ -411,16 +408,12 @@ class BookFinancesListAPIView(generics.ListAPIView):
         "price",
         "overdue_date",
         "penalty_sum",
-        "end_overdue",
-        "is_payment_done",
     )
 
     search_fields = (
         "price",
         "overdue_date",
         "penalty_sum",
-        "end_overdue",
-        "is_payment_done",
     )
 
 
@@ -594,6 +587,9 @@ class ArchiveOrderListAPIView(generics.ListAPIView):
         "taken_by_client",
         "return_date",
         "order_continued_times",
+        "is_overdue",
+        "payment_date",
+        "payed_sum",
     )
     ordering_fields = (
         "order",
@@ -602,6 +598,9 @@ class ArchiveOrderListAPIView(generics.ListAPIView):
         "taken_by_client",
         "return_date",
         "order_continued_times",
+        "is_overdue",
+        "payment_date",
+        "payed_sum",
     )
 
     search_fields = (
@@ -609,6 +608,8 @@ class ArchiveOrderListAPIView(generics.ListAPIView):
         "user_card",
         "taken_by_client",
         "return_date",
+        "payment_date",
+        "payed_sum",
     )
 
 
