@@ -1,4 +1,5 @@
 from django.db import models
+
 from users.models import User
 
 
@@ -263,10 +264,6 @@ class BookFinance(models.Model):
     penalty_sum = models.FloatField(
         default=0, null=False, blank=False, verbose_name="Penalty for overdue"
     )
-    end_overdue = models.DateTimeField(
-        auto_now=False, null=True, blank=True, verbose_name="End date of overdue"
-    )
-    is_payment_done = models.BooleanField(default=None, null=True, blank=True)
 
     def __str__(self):
         return self.price
@@ -345,6 +342,16 @@ class Archive(models.Model):
 
     order_continued_times = models.PositiveSmallIntegerField(
         null=False, blank=False, default=0, verbose_name="Times to continue order"
+    )
+
+    is_overdue = models.BooleanField(default=False)
+
+    payment_date = models.DateField(
+        auto_now=False, null=True, blank=True, default=None, verbose_name="Payment date"
+    )
+
+    payed_sum = models.FloatField(
+        default=None, null=True, blank=True, verbose_name="Payment for overdue"
     )
 
     def __str__(self):
