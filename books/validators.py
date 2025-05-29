@@ -1,9 +1,11 @@
 from datetime import timedelta
-from rest_framework.serializers import ValidationError
+
 from django.utils import timezone
 from django.utils.timezone import localtime
-from books.models import BookDetail, Archive
-from books.tasks import send_tg_message_book_taken, send_tg_message_book_returned, send_tg_message_book_renewed
+from rest_framework.serializers import ValidationError
+
+from books.models import Archive, BookDetail
+from books.tasks import send_tg_message_book
 
 
 class IsBookTaken:
@@ -31,7 +33,6 @@ class IsBookTaken:
         # Get client
         client = value.get("client")
 
-
         # If client exists, get client's user_card
         if client:
             user_card = client.user_card
@@ -50,11 +51,32 @@ class IsBookTaken:
 
             book.taken_by_client = None  # Set null
             book.due_date = None  # Set null
+
+            # Check if book is overdue
+            if book.is_overdue:
+
+                # Choosing  book in Archive Model, which is overdue
+                saved_book = book.archive_order.get(title=book, return_date=None)
+
+                # Changing parameters in Archive model, so it will reflect then history of particular order
+                saved_book.is_overdue = True
+                saved_book.payment_date = time_now
+                saved_book.payed_sum = book.book_finance.penalty_sum
+                saved_book.save()
+
             book.client = None  # Set null
 
+            # Changing parameters in Finance model to None or 0
+            book.book_finance.overdue_day = 0
+            book.book_finance.overdue_date = None
+            book.book_finance.penalty_sum = 0
+            book.book_finance.save()
+
+            # Changing parameters in BookDetail model to False
+            book.is_overdue = False
 
             # Send tg message to the client
-            send_tg_message_book_returned.delay(client_tg_chat_id, str(book))
+            send_tg_message_book.delay(client_tg_chat_id, str(book))
             book.save()
 
             # Logic to find if order for the book exists. If exists, then in Archive table this order sets time
@@ -73,6 +95,7 @@ class IsBookTaken:
             book.taken_by_client = None  # Set null
             book.due_date = None  # Set null
             book.client = None  # Set null
+            book.is_overdue = False  # Set null
             book.save()
 
             # Logic to find if order for the book exists. If exists, then in Archive table this order sets time
@@ -130,22 +153,23 @@ class IsBookTaken:
                     # Sets new time of order in the table BookDetail and new due date
                     book.taken_by_client = time_now  # Get local current time
 
-                    # Sets due date time in the table BookDetail
-                    if str(book.feature) == 'Rare' or str(book.feature) == 'No_features':
-                        book.due_date = book.taken_by_client + timedelta(
-                            days=30
-                        )
+                    # Sets due date time in the table BookDetail, depending on the feature of the book
+                    if (
+                        str(book.feature) == "Rare"
+                        or str(book.feature) == "No_features"
+                    ):
+                        book.due_date = book.taken_by_client + timedelta(days=30)
 
-                    elif str(book.feature) == 'Expensive':
-                        book.due_date = book.taken_by_client + timedelta(
-                            days=15
-                        )
+                    elif str(book.feature) == "Expensive":
+                        book.due_date = book.taken_by_client + timedelta(days=15)
 
                     # Get TG chat id of a client
                     client_tg_chat_id = client.telegram_chat_id
 
                     # Send tg message to the client
-                    send_tg_message_book_renewed.delay(client_tg_chat_id, str(book), book.due_date)
+                    send_tg_message_book.delay(
+                        client_tg_chat_id, str(book), book.due_date, renewed=True
+                    )
 
                     book.save()
 
@@ -177,25 +201,20 @@ class IsBookTaken:
 
             # Adding new order to table Archive
             Archive.objects.create(
-                title=book, user_card=user_card, taken_by_client=time_now
+                order=book, title=book, user_card=user_card, taken_by_client=time_now
             )
 
-            # Sets due date time in the table BookDetail
-            if str(book.feature) == 'Rare' or str(book.feature) == 'No_features':
-                book.due_date = book.taken_by_client + timedelta(
-                    days=30
-                )
+            # Sets due date time in the table BookDetail, depending on the feature of the book
+            if str(book.feature) == "Rare" or str(book.feature) == "No_features":
+                book.due_date = book.taken_by_client + timedelta(days=30)
 
-            elif str(book.feature) == 'Expensive':
-                book.due_date = book.taken_by_client + timedelta(
-                    days=15
-                )
+            elif str(book.feature) == "Expensive":
+                book.due_date = book.taken_by_client + timedelta(days=15)
 
             # Get TG chat id of a client
             client_tg_chat_id = client.telegram_chat_id
 
             # Send tg message to the client
-            send_tg_message_book_taken.delay(client_tg_chat_id, str(book), book.due_date)
-
+            send_tg_message_book.delay(client_tg_chat_id, str(book), book.due_date)
 
             book.save()
