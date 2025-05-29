@@ -179,11 +179,20 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 
 CELERY_BEAT_SCHEDULE = {
-    "send_reminder_and_set_next_date": {
-        "task": "books.tasks.send_reminder_and_set_next_date",
-        "schedule": timedelta(hours=1),
+    "send_notify_overdue": {
+        "task": "books.tasks.send_notify_overdue",
+        "schedule": timedelta(days=1),
+    },
+    "send_reminder_soon_overdue": {
+        "task": "books.tasks.send_reminder_soon_overdue",
+        "schedule": timedelta(days=1),
+    },
+    "calculate_overdue_penalty": {
+        "task": "books.tasks.calculate_overdue_penalty",
+        "schedule": timedelta(days=1),
     },
 }
+
 
 # Telegram settings
 TELEGRAM_URL = "https://api.telegram.org/bot"
