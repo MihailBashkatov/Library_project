@@ -7,10 +7,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "email", "user_card", "telegram_chat_id"]
+        fields = ["id", "email", "password", "user_card", "telegram_chat_id"]
+
 
     def create(self, validated_data):
         """Create users_card for the user"""
+
         user_card = []
         last_user_card = str(User.objects.all().last().id + 1)
         if len(last_user_card) == 1:
