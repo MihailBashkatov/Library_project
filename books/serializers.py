@@ -212,3 +212,38 @@ class BookDetailClientSerializer(serializers.ModelSerializer):
         validators = [
             IsBookTaken(field=["client"]),
         ]
+
+
+class BookPublicSerializer(serializers.ModelSerializer):
+    """Serializer for the model BookDetail for public."""
+
+    book_volume = BookVolumeSerializer(many=True, read_only=True)
+    book_content = BookContentSerializer(read_only=True, many=True)
+    book_general = BookGeneralSerializer(read_only=True)
+
+    def to_internal_value(self, data):
+        book_general_pk = data.get("book_general")
+
+        internal_data = super().to_internal_value(data)
+        try:
+            book_general = BookGeneral.objects.get(pk=book_general_pk)
+        except BookGeneral.DoesNotExist:
+            raise ValidationError(
+                {"book_general": ["Invalid book_general primary key"]},
+                code="invalid",
+            )
+        internal_data["book_general"] = book_general
+        return internal_data
+
+    class Meta:
+        model = BookDetail
+        fields = [
+            "id",
+            "book_general",
+            "edition_year",
+            "page_amount",
+            "picture",
+            "book_content",
+            "feature",
+            "book_volume",
+        ]
