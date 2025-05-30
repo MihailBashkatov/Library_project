@@ -20,11 +20,13 @@ def send_tg_mail_message_book(book, client_tg_chat_id, users_list, due_date=Fals
 
     # Message to renew a book
     elif renewed:
-        message = f'Thanks. You renewed a book "{book}". New Due date is {due_date.strftime("%Y-%m-%d")}'
+        message = (f'Thanks. You renewed a book "{book}". '
+                   f'New Due date is {due_date.strftime("%Y-%m-%d")}')
 
     # Message to take a book
     else:
-        message = f'Thanks. You received a book "{book}". Due date is {due_date.strftime("%Y-%m-%d")}'
+        message = (f'Thanks. You received a book "{book}". '
+                   f'Due date is {due_date.strftime("%Y-%m-%d")}')
 
     try:
         send_telegram_message(client_tg_chat_id, message)
@@ -47,7 +49,8 @@ def send_notify_overdue():
             one_day_time = timedelta(days=1)
             current_difference = local_current_date_time - book.due_date.date()
 
-            # If day exceeds due date on one day, then Overdue status turns ti True and message is sending to the user
+            # If day exceeds due date on one day, then Overdue status turns to True
+            # and message is sending to the user
             if current_difference == one_day_time:
 
                 book.is_overdue = True
@@ -55,7 +58,6 @@ def send_notify_overdue():
                 fee = 0
                 client_tg_chat_id = book.client.telegram_chat_id
                 users_list = [str(book.client),]
-
 
                 if str(book.feature) == "Rare":
                     fee = RARE_FEE
@@ -71,7 +73,8 @@ def send_notify_overdue():
 
                 # General message
                 message = (
-                    f'You have overdue for a book "{book}", author: {book.book_general.author}. Please, return soon as possible. '
+                    f'You have overdue for a book "{book}", '
+                    f'author: {book.book_general.author}. Please, return soon as possible. '
                     + message_fee
                 )
 
@@ -112,7 +115,6 @@ def send_reminder_soon_overdue():
                 # Gets TG Chat id for particular user
                 client_tg_chat_id = book.client.telegram_chat_id
 
-
                 due_date = book.due_date.date()
                 three_days_time = timedelta(days=3)
 
@@ -126,14 +128,16 @@ def send_reminder_soon_overdue():
 
                 # Sets logic for notification before 3 days for expiring
                 if current_difference == three_days_time:
-                    message = f'You have overdue for a book "{book}", author: {book.book_general.author} in 3 days'
+                    message = (f'You have overdue for a book "{book}", '
+                               f'author: {book.book_general.author} in 3 days')
 
                     # Gets email for particular user
                     users_list = [str(book.client), ]
 
                 # Sets logic for notification before 1 day for expiring
                 if current_difference == one_day_time:
-                    message = f'You have overdue for a book "{book}", author: {book.book_general.author} in 1 day'
+                    message = (f'You have overdue for a book "{book}", '
+                               f'author: {book.book_general.author} in 1 day')
 
                     # Gets email for particular user
                     users_list = [str(book.client), ]

@@ -12,7 +12,8 @@ class IsBookTaken:
     """
     Adding validator to check if client, who has a book ,exists,
     then not possible to assign another client until client value set for Null
-    Also there is a logic to set new order in tha table Archive and steps in case client wants to prolong
+    Also there is a logic to set new order in tha table Archive
+    and steps in case client wants to prolong
     ordered book"""
 
     requires_context = True
@@ -65,7 +66,8 @@ class IsBookTaken:
                 # Choosing  book in Archive Model, which is overdue
                 saved_book = book.archive_order.get(title=book, return_date=None)
 
-                # Changing parameters in Archive model, so it will reflect then history of particular order
+                # Changing parameters in Archive model,
+                # so it will reflect then history of particular order
                 saved_book.is_overdue = True
                 saved_book.payment_date = time_now
                 saved_book.payed_sum = book.book_finance.penalty_sum
@@ -87,7 +89,8 @@ class IsBookTaken:
 
             book.save()
 
-            # Logic to find if order for the book exists. If exists, then in Archive table this order sets time
+            # Logic to find if order for the book exists.
+            # If exists, then in Archive table this order sets time
             # of the book return. In case order does not exist, nothing happen
 
             search_order = Archive.objects.filter(title=book, return_date=None).exists()
@@ -106,7 +109,8 @@ class IsBookTaken:
             book.is_overdue = False  # Set null
             book.save()
 
-            # Logic to find if order for the book exists. If exists, then in Archive table this order sets time
+            # Logic to find if order for the book exists.
+            # If exists, then in Archive table this order sets time
             # of the book return. In case order does not exist, nothing happen
 
             search_order = Archive.objects.filter(title=book, return_date=None).exists()
@@ -117,8 +121,10 @@ class IsBookTaken:
             else:
                 pass
 
-        # Logic if any client is already having book (ordered it earlier). It is needed when client wants to
-        # prolong the order. If another client will try to book this book, it will not be allowed
+        # Logic if any client is already having book
+        # (ordered it earlier). It is needed when client wants to
+        # prolong the order.
+        # If another client will try to book this book, it will not be allowed
         elif BookDetail.objects.get(id=book_id).client:
             if client:
                 current_client = BookDetail.objects.filter(
@@ -128,7 +134,8 @@ class IsBookTaken:
                 # Check if targeted client is a client, who already has a book
                 if not current_client:
                     raise ValidationError(
-                        f"book is already taken by client {BookDetail.objects.get(id=book_id).client}. "
+                        f"book is already taken by client "
+                        f"{BookDetail.objects.get(id=book_id).client}. "
                         f"Books need to be return before assigning for a new client"
                     )
 
@@ -153,7 +160,7 @@ class IsBookTaken:
                     # Checks how many times order was prolonged. Maximum is 2 times
                     if order.order_continued_times == 2:
                         raise ValidationError(
-                            f"Book order is already renewed 2 times. No possibility to renew more"
+                            "Book order is already renewed 2 times. No possibility to renew more"
                         )
                     order.order_continued_times += 1
                     order.save()
@@ -161,7 +168,8 @@ class IsBookTaken:
                     # Sets new time of order in the table BookDetail and new due date
                     book.taken_by_client = time_now  # Get local current time
 
-                    # Sets due date time in the table BookDetail, depending on the feature of the book
+                    # Sets due date time in the table BookDetail,
+                    # depending on the feature of the book
                     if (
                         str(book.feature) == "Rare"
                         or str(book.feature) == "No_features"

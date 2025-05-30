@@ -172,9 +172,7 @@ class AuthorsListAPIView(generics.ListAPIView):
 
     serializer_class = AuthorSerializer
     queryset = Author.objects.all()
-    permission_classes = [
-        AllowAny,
-    ]  #  access for all
+    permission_classes = [AllowAny,]  # access for all
 
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = ("name", "surname", "birth_date")
@@ -652,17 +650,6 @@ class ClientArchiveOrderListAPIView(generics.ListAPIView):
         return Archive.objects.filter(user_card=self.request.user.user_card)
 
 
-
-
-
-
-
-
-
-
-
-
-
 class BookPublicListAPIView(generics.ListAPIView):
     """View to create a list of public books"""
 
@@ -695,7 +682,7 @@ class BookPublicListAPIView(generics.ListAPIView):
         "book_general__description",
         "edition_year",
         "page_amount",
-         "book_content__content",
+        "book_content__content",
         "feature__feature",
         "book_volume__number",
     )
@@ -706,9 +693,7 @@ class BookPublicRetrieveAPIView(generics.RetrieveAPIView):
 
     serializer_class = BookPublicSerializer
     queryset = BookDetail.objects.all()
-    permission_classes = [AllowAny,
-    ]  # an access for all
-
+    permission_classes = [AllowAny]  # an access for all
 
 
 class BooksUserRetrieveAPIView(generics.RetrieveAPIView):
