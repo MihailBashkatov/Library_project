@@ -147,13 +147,13 @@ jobs:
 #          ssh-private-key: ${{ secrets.SSH_KEY }}
 
 
-      - name: Run Server
-        run: |
-          ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd ${{ secrets.DEPLOY_DIR }}
-            docker run hello-world
-            docker compose down
-            docker container rm $(docker ps -a -q)
-            docker compose up -d --build
-
-          EOF
+#      - name: Run Server
+#        run: |
+#          ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+#            cd ${{ secrets.DEPLOY_DIR }}
+#            docker run hello-world
+#            docker compose down
+#            docker container rm $(docker ps -a -q)
+#            docker compose up -d --build
+#
+#          EOF
