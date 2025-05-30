@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "email", "password", "user_card", "telegram_chat_id"]
+        fields = ["id", "email", "password", "telegram_chat_id"]
 
     def create(self, validated_data):
         """Create users_card for the user"""
