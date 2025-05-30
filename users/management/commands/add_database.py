@@ -81,7 +81,6 @@ class Command(BaseCommand):
             self.style.SUCCESS(f"Successfully added {len(authors)} authors")
         )
 
-
         genres = [
             {"genre": "Adventure"},
             {"genre": "Kids"},
@@ -120,15 +119,16 @@ class Command(BaseCommand):
             self.style.SUCCESS(f"Successfully added {len(features)} features")
         )
 
-
         books_general = [
             {
                 "library": library,
                 "title": "Игрушки (сборник)",
                 "author": Author.objects.get(surname="Барто"),
-                "description": "В книжке собраны все стихотворения А. Барто из цикла «Игрушки». «Гармошки» - это серия "
+                "description": "В книжке собраны все стихотворения А. Барто из цикла "
+                "«Игрушки». «Гармошки» - это серия "
                 "книжек-гармошек на плотном картоне, в которую вошли популярные сказки, песенки, "
-                "потешки и колыбельные для малышей. Яркие, забавные иллюстрации. Качественный картон "
+                "потешки и колыбельные для малышей. Яркие, забавные иллюстрации. "
+                "Качественный картон "
                 "с глянцевой пленкой. Книжку удобно использовать в игре",
                 "age_restriction": 0,
                 "genre": BookGenre.objects.get(genre="Kids"),
@@ -137,8 +137,10 @@ class Command(BaseCommand):
                 "library": library,
                 "title": '"Сказки" (Сборник сказок)',
                 "author": Author.objects.get(surname="Чуковский"),
-                "description": 'Детская книга Корней Чуковский "Сказки" с 9 аудиосказками - это интересные стихи для '
-                "детей про животных, птиц, насекомых, путешествия, на которых выросло ни одно поколение "
+                "description": 'Детская книга Корней Чуковский "Сказки" с '
+                '9 аудиосказками - это интересные стихи для '
+                "детей про животных, птиц, насекомых, путешествия, "
+                "на которых выросло ни одно поколение "
                 "детей.",
                 "age_restriction": 0,
                 "genre": BookGenre.objects.get(genre="Kids"),
@@ -147,12 +149,18 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "Harry Potter and the Philosopher's Stone",
                 "author": Author.objects.get(surname="Роулинг"),
-                "description": "Harry Potter has never even heard of Hogwarts when the letters start dropping on the"
-                " doormat at number four, Privet Drive. Addressed in green ink on yellowish parchment "
-                "with a purple seal, they are swiftly confiscated by his grisly aunt and uncle. Then, "
-                "on Harry’s eleventh birthday, a great beetle-eyed giant of a man called Rubeus Hagrid "
-                "bursts in with some astonishing news: Harry Potter is a wizard, and he has a place at "
-                "Hogwarts School of Witchcraft and Wizardry. An incredible adventure is about to begin!",
+                "description": "Harry Potter has never even heard of Hogwarts "
+                "when the letters start dropping on the"
+                " doormat at number four, Privet Drive. Addressed in green "
+                "ink on yellowish parchment "
+                "with a purple seal, they are swiftly confiscated by his "
+                "grisly aunt and uncle. Then, "
+                "on Harry’s eleventh birthday, a great beetle-eyed giant of "
+                "a man called Rubeus Hagrid "
+                "bursts in with some astonishing news: Harry Potter is a wizard, "
+                "and he has a place at "
+                "Hogwarts School of Witchcraft and Wizardry. "
+                "An incredible adventure is about to begin!",
                 "age_restriction": 5,
                 "genre": BookGenre.objects.get(genre="Foreign_language"),
             },
@@ -160,7 +168,8 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "A clockwork orange",
                 "author": Author.objects.get(surname="Бёрджесс"),
-                "description": " is a dystopian satirical black comedy novel by English writer Anthony Burgess, "
+                "description": " is a dystopian satirical black comedy novel "
+                "by English writer Anthony Burgess, "
                 "published on March 17, 1962. It is set in a near-future society that has a youth "
                 "subculture of extreme violence.",
                 "age_restriction": 13,
@@ -170,10 +179,14 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "Хищные вещи века",
                 "author": Author.objects.get(surname="Стругацкий"),
-                "description": 'В этот том вошел роман "Хищные вещи века" — одно из ранних произведений братьев '
-                "Стругацких, увлекательный фантастический детектив, герой которого проводит "
-                "расследование в маленькой, задыхающейся от провинциальной тупости и буржуазной "
-                "сырости стране, откуда по миру распространяется новый, смертельно опасный наркотик…",
+                "description": 'В этот том вошел роман "Хищные вещи века" — '
+                'одно из ранних произведений братьев '
+                "Стругацких, увлекательный фантастический детектив, "
+                "герой которого проводит "
+                "расследование в маленькой, задыхающейся от провинциальной "
+                "тупости и буржуазной "
+                "сырости стране, откуда по миру распространяется новый, "
+                "смертельно опасный наркотик…",
                 "age_restriction": 12,
                 "genre": BookGenre.objects.get(genre="Fantasy"),
             },
@@ -181,8 +194,10 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "Властелин колец",
                 "author": Author.objects.get(surname="Толкин"),
-                "description": '"Властелин Колец. Хранители Кольца" - это книга, которая подарит вам незабываемые '
-                "впечатления от захватывающей истории о приключениях хоббита Фродо и его друзей в "
+                "description": '"Властелин Колец. Хранители Кольца" - '
+                'это книга, которая подарит вам незабываемые '
+                "впечатления от захватывающей истории о приключениях"
+                " хоббита Фродо и его друзей в "
                 "мире магии и волшебства.",
                 "age_restriction": 6,
                 "genre": BookGenre.objects.get(genre="Fantasy"),
@@ -191,8 +206,10 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "Война и мир",
                 "author": Author.objects.get(surname="Толстой"),
-                "description": "роман-эпопея Льва Николаевича Толстого, описывающий русское общество в эпоху войн "
-                "против Наполеона в 1805—1812 годах. Эпилог романа доводит повествование до 1820 года.",
+                "description": "роман-эпопея Льва Николаевича Толстого, "
+                "описывающий русское общество в эпоху войн "
+                "против Наполеона в 1805—1812 годах. "
+                "Эпилог романа доводит повествование до 1820 года.",
                 "age_restriction": 8,
                 "genre": BookGenre.objects.get(genre="Classic"),
             },
@@ -200,10 +217,14 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "Преступление и наказание",
                 "author": Author.objects.get(surname="Достоевский"),
-                "description": "Самое известное произведение классика русской литературы Федора Михайловича "
-                "Достоевского. Роман проходят во всех российских школах и вузах, а заграницей он "
-                'считается одним из символов русской культуры. "Преступление и наказание" поднимает '
-                "важнейшие нравственно-мировоззренческие вопросы - о вере, совести, грехе и об "
+                "description": "Самое известное произведение классика "
+                "русской литературы Федора Михайловича "
+                "Достоевского. Роман проходят во всех российских школах "
+                "и вузах, а заграницей он "
+                'считается одним из символов русской культуры. '
+                '"Преступление и наказание" поднимает '
+                "важнейшие нравственно-мировоззренческие вопросы "
+                "- о вере, совести, грехе и об "
                 "искуплении через страдание.",
                 "age_restriction": 12,
                 "genre": BookGenre.objects.get(genre="Classic"),
@@ -212,8 +233,10 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "Робинзон Крузо",
                 "author": Author.objects.get(surname="Дефо"),
-                "description": "История человека, сумевшего выжить на необитаемом острове. История его борьбы с "
-                "безжалостными силами природы и блистательной победы. История его дружбы с благородным "
+                "description": "История человека, сумевшего выжить на необитаемом острове. "
+                "История его борьбы с "
+                "безжалостными силами природы и блистательной победы. "
+                "История его дружбы с благородным "
                 "дикарем и опасной схватки с пиратами... ",
                 "age_restriction": 5,
                 "genre": BookGenre.objects.get(genre="Adventure"),
@@ -222,13 +245,18 @@ class Command(BaseCommand):
                 "library": library,
                 "title": "Маленький принц",
                 "author": Author.objects.get(surname="Де Сент-Экзюпери"),
-                "description": "Есть произведения, которые можно читать и перечитывать много раз. "
-                "Книга Антуана де Сент-Экзюпери «Маленький принц» одна из таких. "
-                "С момента первого издания в 1943 году она входит в число самых читаемых в мире. "
-                "Ее автор, французский летчик и писатель, взрослый, так и оставшийся в душе ребенком. "
+                "description": "Есть произведения, которые можно читать и "
+                "перечитывать много раз. "
+                "Книга Антуана де Сент-Экзюпери «Маленький принц» "
+                "одна из таких. "
+                "С момента первого издания в 1943 году она входит в число "
+                "самых читаемых в мире. "
+                "Ее автор, французский летчик и писатель, взрослый, "
+                "так и оставшийся в душе ребенком. "
                 "Книга «Маленький принц» рассказывает о необыкновенной встрече пилота "
-                "(из-за неполадок в моторе летчику пришлось посадить самолет в пустыне) "
-                "с Маленьким принцем, гостем с другой планеты. Это произведение входит в программу "
+                "(из-за неполадок в моторе летчику пришлось посадить самолет в пустыне)"
+                "с Маленьким принцем, гостем с другой планеты. "
+                " Это произведение входит в программу "
                 "литературы 6 класса",
                 "age_restriction": 0,
                 "genre": BookGenre.objects.get(genre="Adventure"),
@@ -354,7 +382,6 @@ class Command(BaseCommand):
             self.style.SUCCESS(f"Successfully added {len(books_volume)} volumes\n")
         )
 
-
         contents = [
             {"volume": BookVolume.objects.get(number=1), "number": " ", "content": "Том первый"},
             {"volume": BookVolume.objects.get(number=1), "number": " ", "content": "Часть первая"},
@@ -467,7 +494,6 @@ class Command(BaseCommand):
             )
         )
 
-
         self.stdout.write(
-            self.style.SUCCESS(f"Successfully added 2 Librarians and 4 users\n")
+            self.style.SUCCESS("Successfully added 2 Librarians and 4 users\n")
         )
