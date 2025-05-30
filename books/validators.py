@@ -5,7 +5,7 @@ from django.utils.timezone import localtime
 from rest_framework.serializers import ValidationError
 
 from books.models import Archive, BookDetail
-from books.tasks import send_tg_message_book
+from books.tasks import send_tg_mail_message_book
 
 
 class IsBookTaken:
@@ -37,6 +37,10 @@ class IsBookTaken:
         if client:
             user_card = client.user_card
 
+            users_list = [
+                str(client),
+            ]
+
         # Set local time
         time_now = localtime(timezone.now())
 
@@ -48,6 +52,9 @@ class IsBookTaken:
 
             # Get TG chat id of a client
             client_tg_chat_id = book.client.telegram_chat_id
+            users_list = [
+                str(book.client),
+            ]
 
             book.taken_by_client = None  # Set null
             book.due_date = None  # Set null
@@ -76,7 +83,8 @@ class IsBookTaken:
             book.is_overdue = False
 
             # Send tg message to the client
-            send_tg_message_book.delay(client_tg_chat_id, str(book))
+            send_tg_mail_message_book.delay(str(book), client_tg_chat_id, users_list)
+
             book.save()
 
             # Logic to find if order for the book exists. If exists, then in Archive table this order sets time
@@ -166,9 +174,17 @@ class IsBookTaken:
                     # Get TG chat id of a client
                     client_tg_chat_id = client.telegram_chat_id
 
+                    users_list = [
+                        str(client),
+                    ]
+
                     # Send tg message to the client
-                    send_tg_message_book.delay(
-                        client_tg_chat_id, str(book), book.due_date, renewed=True
+                    send_tg_mail_message_book.delay(
+                        str(book),
+                        client_tg_chat_id,
+                        users_list,
+                        book.due_date,
+                        renewed=True,
                     )
 
                     book.save()
@@ -214,7 +230,14 @@ class IsBookTaken:
             # Get TG chat id of a client
             client_tg_chat_id = client.telegram_chat_id
 
+            users_list = [
+                str(client),
+            ]
+            print(users_list)
+
             # Send tg message to the client
-            send_tg_message_book.delay(client_tg_chat_id, str(book), book.due_date)
+            send_tg_mail_message_book.delay(
+                str(book), client_tg_chat_id, users_list, book.due_date
+            )
 
             book.save()
