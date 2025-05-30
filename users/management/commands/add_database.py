@@ -61,11 +61,7 @@ class Command(BaseCommand):
             {"name": "Фёдор", "surname": "Достоевский", "birth_date": "1821-10-30"},
             {"name": "Борис", "surname": "Стругацкий", "birth_date": "1933-04-15"},
             {"name": "Джон", "surname": "Толкин", "birth_date": "1892-01-03"},
-            {
-                "name": "Антуан",
-                "surname": "Де Сент-Экзюпери",
-                "birth_date": "1900-06-29",
-            },
+            {"name": "Антуан", "surname": "Де Сент-Экзюпери", "birth_date": "1900-06-29"},
         ]
 
         for author_data in authors:
