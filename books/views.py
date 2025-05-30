@@ -328,7 +328,7 @@ class LibraryDestroyAPIView(generics.DestroyAPIView):
     queryset = Library.objects.all()
     permission_classes = [
         IsAuthenticated,
-        IsLibrarian,
+        IsAdminUser,
     ]  # an access only for admin
 
 
