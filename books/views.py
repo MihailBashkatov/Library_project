@@ -13,7 +13,7 @@ from books.serializers import (ArchiveOrderSerializer, AuthorSerializer,
                                BookDetailSerializer, BookFeatureSerializer,
                                BookFinanceSerializer, BookGeneralSerializer,
                                BookGenreSerializer, BookVolumeSerializer,
-                               LibrarySerializer)
+                               LibrarySerializer, BookPublicSerializer)
 
 
 class BookCreateAPIView(generics.CreateAPIView):
@@ -24,13 +24,14 @@ class BookCreateAPIView(generics.CreateAPIView):
 
 
 class BooksListAPIView(generics.ListAPIView):
-    """View to create a list of public books"""
+    """View to create a list of books for librarian and admin"""
 
     serializer_class = BookDetailSerializer
     queryset = BookDetail.objects.all()
     permission_classes = [
-        AllowAny,
-    ]  # access for all users
+        IsAuthenticated,
+        IsLibrarian | IsAdminUser,
+    ]  # an access only for librarian and admin
     filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
     filterset_fields = (
         "book_general",
@@ -128,13 +129,14 @@ class BooksUserListAPIView(generics.ListAPIView):
 
 
 class BookRetrieveAPIView(generics.RetrieveAPIView):
-    """View to get a particular book for the user"""
+    """View to get a particular book for the librarian and adminr"""
 
     serializer_class = BookDetailSerializer
     queryset = BookDetail.objects.all()
     permission_classes = [
-        AllowAny,
-    ]  # access for all
+        IsAuthenticated,
+        IsLibrarian | IsAdminUser,
+    ]  # an access only for librarian and admin
 
 
 class BookUpdateAPIView(generics.UpdateAPIView):
@@ -648,3 +650,74 @@ class ClientArchiveOrderListAPIView(generics.ListAPIView):
     def get_queryset(self):
 
         return Archive.objects.filter(user_card=self.request.user.user_card)
+
+
+
+
+
+
+
+
+
+
+
+
+
+class BookPublicListAPIView(generics.ListAPIView):
+    """View to create a list of public books"""
+
+    serializer_class = BookPublicSerializer
+    queryset = BookDetail.objects.all()
+    permission_classes = [
+        AllowAny,
+    ]  # an access for all
+    filter_backends = [DjangoFilterBackend, OrderingFilter, SearchFilter]
+    filterset_fields = (
+        "book_general",
+        "edition_year",
+        "page_amount",
+        "book_content",
+        "feature",
+        "book_volume",
+    )
+
+    ordering_fields = (
+        "book_general",
+        "edition_year",
+        "page_amount",
+        "book_content",
+        "feature",
+        "book_volume",
+    )
+
+    search_fields = (
+        "book_general__title",
+        "book_general__description",
+        "edition_year",
+        "page_amount",
+         "book_content__content",
+        "feature__feature",
+        "book_volume__number",
+    )
+
+
+class BookPublicRetrieveAPIView(generics.RetrieveAPIView):
+    """View to get a particular book for all"""
+
+    serializer_class = BookPublicSerializer
+    queryset = BookDetail.objects.all()
+    permission_classes = [AllowAny,
+    ]  # an access for all
+
+
+
+class BooksUserRetrieveAPIView(generics.RetrieveAPIView):
+    """View to get a particular book for  particular user"""
+
+    serializer_class = BookDetailSerializer
+    queryset = BookDetail.objects.all()
+    permission_classes = [IsAuthenticated, IsOwner]  # an access only for user
+
+    def get_queryset(self):
+
+        return BookDetail.objects.filter(client=self.request.user)
