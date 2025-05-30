@@ -6,28 +6,29 @@ from django.utils import timezone
 from django.utils.timezone import localtime
 
 from books.models import BookDetail
-from books.overdue_fees import EXPENSIVE_FEE, NO_FEATURES_FEE, RARE_FEE
+from books.services import EXPENSIVE_FEE, NO_FEATURES_FEE, RARE_FEE, send_email_message
 from books.services import send_telegram_message
 
 
 @shared_task
-def send_tg_message_book(client_tg_chat_id, book, due_date=False, renewed=False):
+def send_tg_mail_message_book(book, client_tg_chat_id, users_list, due_date=False, renewed=False):
     """Task to send Telegram message, if user took, renew or return a book"""
 
     # Message for returning a book
     if not due_date:
-        message = f'Thanks. you returned a book "{book}". Welcome again'
+        message = f'Thanks. You returned a book "{book}". Welcome again'
 
     # Message to renew a book
     elif renewed:
-        message = f'Thanks. you renewed a book "{book}". New Due date is {due_date.strftime("%Y-%m-%d")}'
+        message = f'Thanks. You renewed a book "{book}". New Due date is {due_date.strftime("%Y-%m-%d")}'
 
     # Message to take a book
     else:
-        message = f'Thanks. you received a book "{book}". Due date is {due_date.strftime("%Y-%m-%d")}'
+        message = f'Thanks. You received a book "{book}". Due date is {due_date.strftime("%Y-%m-%d")}'
 
     try:
         send_telegram_message(client_tg_chat_id, message)
+        send_email_message(users_list, book, message)
     except Exception as e:
         print(f"Error during sending telegram message: {e}")
 
@@ -53,6 +54,9 @@ def send_notify_overdue():
                 book.save()
                 fee = 0
                 client_tg_chat_id = book.client.telegram_chat_id
+                users_list = [str(book.client),]
+
+
                 if str(book.feature) == "Rare":
                     fee = RARE_FEE
                 elif str(book.feature) == "Expensive":
@@ -73,6 +77,7 @@ def send_notify_overdue():
 
                 try:
                     send_telegram_message(client_tg_chat_id, message)
+                    send_email_message(users_list, str(book), message)
                 except Exception as e:
                     print(f"Error during sending telegram message: {e}")
 
@@ -107,6 +112,7 @@ def send_reminder_soon_overdue():
                 # Gets TG Chat id for particular user
                 client_tg_chat_id = book.client.telegram_chat_id
 
+
                 due_date = book.due_date.date()
                 three_days_time = timedelta(days=3)
 
@@ -116,17 +122,25 @@ def send_reminder_soon_overdue():
                 current_difference = due_date - local_current_date_time
 
                 message = ""
+                users_list = []
 
                 # Sets logic for notification before 3 days for expiring
                 if current_difference == three_days_time:
                     message = f'You have overdue for a book "{book}", author: {book.book_general.author} in 3 days'
 
+                    # Gets email for particular user
+                    users_list = [str(book.client), ]
+
                 # Sets logic for notification before 1 day for expiring
                 if current_difference == one_day_time:
                     message = f'You have overdue for a book "{book}", author: {book.book_general.author} in 1 day'
 
+                    # Gets email for particular user
+                    users_list = [str(book.client), ]
+
                 try:
                     send_telegram_message(client_tg_chat_id, message)
+                    send_email_message(users_list, str(book), message)
                 except Exception as e:
                     print(f"Error during sending telegram message: {e}")
 
