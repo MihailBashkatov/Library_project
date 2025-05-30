@@ -22,7 +22,8 @@ from books.views import (AuthorCreateAPIView, AuthorDestroyAPIView,
                          BookContentUpdateAPIView, BookContentDestroyAPIView, BookFeatureCreateAPIView,
                          BookFeaturesListAPIView, BookFeatureRetrieveAPIView, BookFeatureUpdateAPIView,
                          BookFeatureDestroyAPIView, BookUpdateClientAPIView,
-                         ArchiveOrderListAPIView, ClientArchiveOrderListAPIView, GenreCreateAPIView)
+                         ArchiveOrderListAPIView, ClientArchiveOrderListAPIView, GenreCreateAPIView,
+                         BookPublicRetrieveAPIView, BooksUserRetrieveAPIView, BookPublicListAPIView)
 
 app_name = BooksConfig.name
 
@@ -35,7 +36,11 @@ urlpatterns = [
     path("book/update/<int:pk>/", BookUpdateAPIView.as_view(), name="book-update"),
     path("book/delete/<int:pk>/", BookDestroyAPIView.as_view(), name="book-delete"),
     # Path to get only users list of books
-    path("user/books/", BooksUserListAPIView.as_view(), name="books-user-list"),
+    path("books/user/", BooksUserListAPIView.as_view(), name="books-user-list"),
+
+    # Path to get particular book only user
+    path("book/user/<int:pk>/", BooksUserRetrieveAPIView.as_view(), name="book_user-detail"),
+
     # Paths for Author CRUD
     path("author/create/", AuthorCreateAPIView.as_view(), name="author-create"),
     path("authors/", AuthorsListAPIView.as_view(), name="authors-list"),
@@ -111,5 +116,11 @@ urlpatterns = [
 
     # Path to receive all orders archive for user
     path("client/archive/", ClientArchiveOrderListAPIView.as_view(), name="client_archive-list"),
+
+    # Paths for BookList  and particular book for public
+    path("books/public/", BookPublicListAPIView.as_view(), name="books_public-list"),
+    path("book/public/<int:pk>/", BookPublicRetrieveAPIView.as_view(), name="book_public-detail"),
+
+
 
 ]
