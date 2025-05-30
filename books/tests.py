@@ -10,11 +10,12 @@ class LibraryTestCase(APITestCase):
 
     def setUp(self) -> None:
         self.user_1 = User.objects.create(email="user1@user.com")
-        self.user_1.is_staff=True
+        self.user_1.is_staff = True
         self.user_1.save()
-        self.library = Library.objects.create(name="Library",
-                                             main_page='Main page text',
-                                             rules_page='Rules page text')
+        self.library = Library.objects.create(
+            name="Library",
+            main_page='Main page text',
+            rules_page='Rules page text')
 
         self.client.force_authenticate(user=self.user_1)
 
