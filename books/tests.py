@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from books.models import (Archive, Author, BookDetail, BookFeature,
+from books.models import (Author, BookDetail, BookFeature,
                           BookFinance, BookGeneral, BookGenre, Library)
 from users.models import User
 
