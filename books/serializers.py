@@ -119,7 +119,7 @@ class BookDetailSerializer(serializers.ModelSerializer):
     book_general = BookGeneralSerializer(read_only=True)
     client = UserSerializer(read_only=True)
     taken_by_client = serializers.DateTimeField(
-        required=True, input_formats=["%Y-%m-%d %H:%M"]
+        required=False, input_formats=["%Y-%m-%d %H:%M"]
     )
 
     def to_internal_value(self, data):
