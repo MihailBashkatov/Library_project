@@ -1,7 +1,7 @@
 from django.core.management import BaseCommand
 
 from books.models import (Author, BookDetail, BookFeature, BookFinance,
-                          BookGeneral, BookGenre, BookVolume, Library, BookContent)
+                          BookGeneral, BookGenre, BookVolume, Library, BookContent, Archive)
 from users.models import User
 from users.utils import create_user
 
@@ -11,6 +11,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Delete Data from database
+        Archive.objects.all().delete()
         Library.objects.all().delete()
         User.objects.all().delete()
         Author.objects.all().delete()
