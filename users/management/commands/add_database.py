@@ -279,7 +279,6 @@ class Command(BaseCommand):
                 "edition_year": "1950-01-10",
                 "page_amount": 75,
                 "feature": BookFeature.objects.get(feature="Rare"),
-                "client": user_3,
             },
             {
                 "book_general": BookGeneral.objects.get(
@@ -287,7 +286,6 @@ class Command(BaseCommand):
                 ),
                 "edition_year": "1964-03-23",
                 "page_amount": 50,
-                "client": user_4,
                 "feature": BookFeature.objects.get(feature="No_features"),
             },
             {
@@ -296,7 +294,6 @@ class Command(BaseCommand):
                 ),
                 "edition_year": "2010-06-10",
                 "page_amount": 568,
-                "client": user_5,
                 "feature": BookFeature.objects.get(feature="No_features"),
             },
             {
@@ -310,7 +307,6 @@ class Command(BaseCommand):
                 "book_general": BookGeneral.objects.get(title="Хищные вещи века"),
                 "edition_year": "1995-11-15",
                 "page_amount": 250,
-                "client": user_3,
                 "feature": BookFeature.objects.get(feature="No_features"),
             },
             {
@@ -318,14 +314,12 @@ class Command(BaseCommand):
                 "edition_year": "2000-01-25",
                 "page_amount": 756,
                 "feature": BookFeature.objects.get(feature="Expensive"),
-                "client": user_4,
             },
             {
                 "book_general": BookGeneral.objects.get(title="Война и мир"),
                 "edition_year": "1928-12-08",
                 "feature": BookFeature.objects.get(feature="Rare"),
                 "page_amount": 586,
-                "client": user_5,
             },
             {
                 "book_general": BookGeneral.objects.get(
