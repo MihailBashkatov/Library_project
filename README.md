@@ -202,7 +202,7 @@ To set up variables for email follow instruction here https://yandex.ru/support/
 
 5) App is available
 
-http://84.201.144.206/habits/
+http://51.250.46.204/books/public/
 
 
 
@@ -227,7 +227,7 @@ http://84.201.144.206/habits/
 #### If you want to receive reminder via Telegram
 
 
-#### Add your user profile http://84.201.144.206/user/create/
+#### Add your user profile http://51.250.46.204/user/create/
 
 
 1) Find out you Telegram ID (e.g via @userinfobot)
@@ -238,7 +238,7 @@ http://84.201.144.206/habits/
 #### Project documentation is placed 
 
 
-http://84.201.144.206/swagger/
+http://51.250.46.204/swagger/
 
 
 LINKs, Finalize README, push to Github (new SERVER API in Actions))
