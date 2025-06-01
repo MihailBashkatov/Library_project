@@ -13,7 +13,7 @@
 
 ## 2. Models
 
-### There are models 11, describing library functionality
+### There are 11 models, describing library functionality
 
 ### Books app
 #### - Library
@@ -76,7 +76,11 @@
 - UseList - User
 
 #### - User
--
+- Create - all
+- List - Librarian, Admin
+- Retrieve - User (only self user data), Librarian (any user), Admin (any user)
+- Update - User
+- Delete - User, Admin
 
 ### All views are added with Ordering, Filtering, Search functions
 
@@ -110,7 +114,7 @@
 - All communication goes via email or TG BOT (optional)
 #### Celery and Celery Beat
 - Some logic and notification happens via Celery
-- ALl fees calculation, overdue days calculation, info about coming soon overdue performs by Celery Beat 
+- All fees calculation, overdue days calculation, info about coming soon overdue performs by Celery Beat 
 
 ## Start project
    1) Create a directory 
@@ -180,18 +184,19 @@ To generate SECRET_KEY
 
 To generate BOT_TOKEN follow instructions here https://t.me/BotFather
 
-To set up variables for email follow instruction here https://yandex.ru/support/mail/mail-clients/others.html#smtpsetting
+To set up variables for EMAIL follow instruction here https://yandex.ru/support/mail/mail-clients/others.html#smtpsetting
+
 6) Insert command in the terminal
 
 
        docker compose up --build
 
 
-6) If container library_celery_beat does not get connection to the postgres (log error "connection to server at "db" (172.18.0.3), port 5432 failed: Connection refused
+7) If container library_celery_beat does not get connection to the postgres (log error "connection to server at "db" (172.18.0.3), port 5432 failed: Connection refused
 
         Is the server running on that host and accepting TCP/IP connections?
 
-7) stop the container  start it again
+8) stop the container  start it again
 
 
        docker stop final_task_celery_beat
@@ -200,25 +205,24 @@ To set up variables for email follow instruction here https://yandex.ru/support/
        docker start final_task_celery_beat
 
 
-5) App is available
+9) App is available
 
 http://51.250.46.204/books/public/
 
 
-
-9) To stop the programme
+10) To stop the programme
 
 
             docker stop $(docker ps -aq)
 
 
-5) To start the programme again
+11) To start the programme again
 
 
             docker start $(docker ps -aq)
 
 
-6) To remove all containers
+12) To remove all containers
 
 
             docker compose down
