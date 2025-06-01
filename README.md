@@ -239,6 +239,3 @@ http://51.250.46.204/books/public/
 
 
 http://51.250.46.204/swagger/
-
-
-LINKs, Finalize README, push to Github (new SERVER API in Actions))
